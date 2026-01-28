@@ -390,3 +390,72 @@ document.addEventListener("DOMContentLoaded", function() {
             syncAllForms("AE");
         });
 });
+
+
+
+
+/* ===== Mobile nav toggle JS (append inside DOMContentLoaded scope) ===== */
+(function mobileNavEnsure() {
+  const toggle = document.querySelector('.nav-toggle');
+  const nav = document.querySelector('.nav-list');
+  // create overlay if not present
+  let overlay = document.querySelector('.nav-overlay');
+  if (!overlay) {
+    overlay = document.createElement('div');
+    overlay.className = 'nav-overlay';
+    document.body.appendChild(overlay);
+  }
+
+  if (!toggle || !nav) {
+    // nothing to attach
+    return;
+  }
+
+  // ensure single handlers
+  function closeNav() {
+    nav.classList.remove('show', 'open');
+    overlay.classList.remove('show');
+    toggle.setAttribute('aria-expanded', 'false');
+    document.documentElement.classList.remove('nav-open');
+  }
+  function openNav() {
+    nav.classList.add('show', 'open');
+    overlay.classList.add('show');
+    toggle.setAttribute('aria-expanded', 'true');
+    document.documentElement.classList.add('nav-open');
+  }
+  function toggleNav(e) {
+    e && e.preventDefault && e.preventDefault();
+    if (nav.classList.contains('show')) closeNav(); else openNav();
+  }
+
+  // remove previous handlers if any
+  if (toggle._navHandler) {
+    toggle.removeEventListener('click', toggle._navHandler);
+    toggle.removeEventListener('touchstart', toggle._navHandler);
+  }
+  toggle.addEventListener('click', toggleNav, { passive: false });
+  toggle.addEventListener('touchstart', toggleNav, { passive: false });
+  toggle._navHandler = toggleNav;
+
+  // overlay closes nav
+  if (overlay._overlayHandler) overlay.removeEventListener('click', overlay._overlayHandler);
+  overlay.addEventListener('click', closeNav, { passive: true });
+  overlay._overlayHandler = closeNav;
+
+  // close on Escape
+  function escHandler(e) { if (e.key === 'Escape' && nav.classList.contains('show')) closeNav(); }
+  if (!document._navEscHandler) {
+    document.addEventListener('keydown', escHandler, { passive: true });
+    document._navEscHandler = escHandler;
+  }
+
+  // close when resizing to desktop
+  function onResize() {
+    if (window.innerWidth > 992 && nav.classList.contains('show')) closeNav();
+  }
+  if (!window._navResizeHandler) {
+    window.addEventListener('resize', onResize, { passive: true });
+    window._navResizeHandler = onResize;
+  }
+})();
