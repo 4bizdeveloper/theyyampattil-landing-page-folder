@@ -1115,3 +1115,89 @@ button{font-family:inherit}
   position: relative !important;
   z-index: 5 !important;
 }
+
+
+
+
+/* ===== Mobile nav toggle & nav fixes ===== */
+.nav-toggle {
+  position: relative;
+  z-index: 9999 !important;
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  pointer-events: auto !important;
+}
+
+/* Ensure header overlays don't block the toggle */
+.lp-header::before,
+.lp-header::after,
+.header-overlay,
+.site-overlay {
+  pointer-events: none !important;
+}
+
+/* Slide-in nav panel for mobile */
+.nav-list {
+  position: fixed;
+  top: 0;
+  right: 0;
+  height: 100vh;
+  width: 280px;
+  max-width: 85%;
+  transform: translateX(100%);
+  transition: transform 260ms ease-in-out;
+  background: var(--nav-bg, #fff);
+  z-index: 9998;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  pointer-events: auto;
+}
+
+/* Visible state */
+.nav-list.show,
+.nav-list.open {
+  transform: translateX(0);
+}
+
+/* Optional overlay behind nav */
+.nav-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.35);
+  z-index: 9997;
+  display: none;
+}
+.nav-overlay.show { display: block; }
+
+/* Ensure nav links are clickable */
+.nav-list a, .nav-list button { pointer-events: auto; }
+
+/* Small screens: ensure toggle visible */
+@media (max-width: 992px) {
+  .nav-toggle { display: inline-flex !important; }
+  .lp-header { z-index: 9996; }
+}
+
+
+/* Hide mobile nav toggle on desktop, show on small screens */
+@media (min-width: 993px) {
+  .nav-toggle {
+    display: none !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+  }
+}
+
+/* Ensure toggle remains visible and clickable on mobile */
+@media (max-width: 992px) {
+  .nav-toggle {
+    display: inline-flex !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+  }
+}
+
