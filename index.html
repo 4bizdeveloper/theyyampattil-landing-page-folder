@@ -312,21 +312,24 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <div class="modal-content" role="document">
     <button class="close-modal" aria-label="Close" id="contactModalClose">&times;</button>
 
+
+
+    
     <form id="modal-quote-form" class="instant-form" action="send-mail.php" method="POST" novalidate>
       <h3 id="contactModalTitle">Get a Free Quote</h3>
 
-      <!-- Visible country + prefix row -->
       <div class="phone-row">
-        <input id="modal-phone-prefix" type="text" readonly aria-hidden="true" class="phone-prefix" />
-        <select id="modal-country-select" name="country_select" aria-label="Country" required>
-          <option value="">Select country</option>
-        </select>
-        <!-- Fallback arrow element (visible if CSS background-image is suppressed) -->
-        <span class="select-arrow-fallback" aria-hidden="true"></span>
-      </div>
+  <input id="modal-phone-prefix" type="text" readonly aria-hidden="true" class="phone-prefix" />
+  
+  <select id="modal-country-select" name="country_select" class="country-select" aria-label="Country" required>
+    <option value="">Select country</option>
+  </select>
+</div>
 
-      <!-- Hidden ISO country code sent to server -->
-      <input type="hidden" id="modal-country" name="country" value="">
+<input type="hidden" id="modal-country" name="country" class="hidden-country-code" value="">
+
+
+
 
       <label class="sr-only" for="modal-name">Your name</label>
       <input id="modal-name" name="name" type="text" placeholder="Your Name" required autocomplete="name">
