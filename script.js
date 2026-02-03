@@ -279,121 +279,11 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
 
-/* Auto-select country for main + modal: locale -> geolocation -> IP -> AE fallback */
-(function autoSelectCountryForForms() {
-  const mainSelect = document.getElementById('country-select');
-  const modalSelect = document.getElementById('modal-country-select');
-  const mainPrefix = document.getElementById('phone-prefix');
-  const modalPrefix = document.getElementById('modal-phone-prefix');
-  const hiddenMainCountry = document.getElementById('country');
-  const hiddenModalCountry = document.getElementById('modal-country');
-  const mainPhone = document.getElementById('main-phone') || document.getElementById('phone');
-  const modalPhone = document.getElementById('modal-phone');
 
-  function setSelectByIso(selectEl, iso, prefixEl, phoneEl, hiddenEl) {
-    if (!selectEl || !iso) return false;
-    const opt = selectEl.querySelector(`option[value="${iso}"]`);
-    if (!opt) return false;
-    selectEl.value = iso;
-    const dial = opt.dataset && opt.dataset.dial ? opt.dataset.dial : (opt.getAttribute('data-dial') || '');
-    if (prefixEl) prefixEl.value = dial || '';
-    if (phoneEl) phoneEl.placeholder = dial ? `${dial} 5xxxxxxx` : 'Phone Number';
-    if (hiddenEl) hiddenEl.value = iso;
-    return true;
-  }
 
-  function waitForOptions(selectEl, timeout = 3000) {
-    return new Promise(resolve => {
-      if (!selectEl) return resolve(false);
-      if (selectEl.options && selectEl.options.length > 0) return resolve(true);
-      const start = Date.now();
-      const iv = setInterval(() => {
-        if (selectEl.options && selectEl.options.length > 0) {
-          clearInterval(iv);
-          return resolve(true);
-        }
-        if (Date.now() - start > timeout) {
-          clearInterval(iv);
-          return resolve(false);
-        }
-      }, 80);
-    });
-  }
 
-  function detectIsoFromLocale() {
-    try {
-      const locale = (Intl && Intl.DateTimeFormat) ? Intl.DateTimeFormat().resolvedOptions().locale : (navigator && navigator.language) || '';
-      if (!locale) return '';
-      const parts = locale.split(/[-_]/);
-      if (parts.length > 1) return parts[1].toUpperCase();
-    } catch (e) {}
-    return '';
-  }
 
-  function coordsToCountry(lat, lon) {
-    return fetch(`https://ipapi.co/${lat},${lon}/json/`)
-      .then(r => r.ok ? r.json() : Promise.reject())
-      .then(d => d && d.country ? d.country.toUpperCase() : '')
-      .catch(() => '');
-  }
 
-  function ipLookupCountry() {
-    return fetch('https://ipapi.co/json/')
-      .then(r => r.ok ? r.json() : Promise.reject())
-      .then(d => d && (d.country || d.country_code) ? (d.country || d.country_code).toUpperCase() : '')
-      .catch(() => '');
-  }
-
-  async function autoFor(selectEl, prefixEl, phoneEl, hiddenEl) {
-    if (!selectEl) return;
-    await waitForOptions(selectEl, 3000);
-
-    // 1 Locale
-    const isoLocale = detectIsoFromLocale();
-    if (isoLocale && setSelectByIso(selectEl, isoLocale, prefixEl, phoneEl, hiddenEl)) return;
-
-    // 2 Geolocation
-    if (navigator.geolocation) {
-      try {
-        const pos = await new Promise((resolve, reject) => {
-          const timer = setTimeout(() => reject(new Error('geo timeout')), 8000);
-          navigator.geolocation.getCurrentPosition(p => { clearTimeout(timer); resolve(p); }, err => { clearTimeout(timer); reject(err); }, { timeout: 8000 });
-        });
-        if (pos && pos.coords) {
-          const iso = await coordsToCountry(pos.coords.latitude, pos.coords.longitude);
-          if (iso && setSelectByIso(selectEl, iso, prefixEl, phoneEl, hiddenEl)) return;
-        }
-      } catch (e) { /* denied or timed out */ }
-    }
-
-    // 3 IP fallback
-    const isoIp = await ipLookupCountry();
-    if (isoIp && setSelectByIso(selectEl, isoIp, prefixEl, phoneEl, hiddenEl)) return;
-
-    // 4 Final fallback to UAE
-    setSelectByIso(selectEl, 'AE', prefixEl, phoneEl, hiddenEl);
-  }
-
-  // Run for both selects (non-blocking)
-  autoFor(mainSelect, mainPrefix, mainPhone, hiddenMainCountry);
-  autoFor(modalSelect, modalPrefix, modalPhone, hiddenModalCountry);
-
-  // Keep manual changes working and keep hidden ISO in sync
-  [ {sel: mainSelect, prefix: mainPrefix, phone: mainPhone, hidden: hiddenMainCountry},
-    {sel: modalSelect, prefix: modalPrefix, phone: modalPhone, hidden: hiddenModalCountry}
-  ].forEach(cfg => {
-    const sel = cfg.sel;
-    if (!sel) return;
-    sel.addEventListener('change', function () {
-      const iso = this.value || '';
-      const opt = this.selectedOptions && this.selectedOptions[0];
-      const dial = opt ? (opt.dataset.dial || opt.getAttribute('data-dial') || '') : '';
-      if (cfg.prefix) cfg.prefix.value = dial || '';
-      if (cfg.phone) cfg.phone.placeholder = dial ? `${dial} 5xxxxxxx` : 'Phone Number';
-      if (cfg.hidden) cfg.hidden.value = iso;
-    });
-  });
-})();
 
 
 
@@ -438,11 +328,7 @@ document.addEventListener('DOMContentLoaded', function () {
 // Force default to UAE if nothing else selected yet
 if (typeof setSelectByIso === 'function') {
   // run after populate so options exist
-  setTimeout(() => {
-    // only set if user/auto detection hasn't already selected something
-    if (mainSelect && !mainSelect.value) setSelectByIso(mainSelect, 'AE', mainPrefix, mainPhone);
-    if (modalSelect && !modalSelect.value) setSelectByIso(modalSelect, 'AE', modalPrefix, modalPhone);
-  }, 50);
+ 
 }
 
 
@@ -713,3 +599,337 @@ if (typeof setSelectByIso === 'function') {
     window._navResizeHandler = onResize;
   }
 })();
+
+
+// Strict UAE default: set AE and prevent programmatic overwrites unless user chooses
+(function forceUaeStrict() {
+  const AE_ISO = 'AE';
+  const AE_DIAL = '+971';
+  const MAIN_ID = 'country-select';
+  const MODAL_ID = 'modal-country-select';
+  const PREFIX_MAIN_ID = 'phone-prefix';
+  const PREFIX_MODAL_ID = 'modal-phone-prefix';
+  const HIDDEN_MAIN_ID = 'country';
+  const HIDDEN_MODAL_ID = 'modal-country';
+  const PHONE_MAIN_ID = 'phone';
+  const PHONE_MODAL_ID = 'modal-phone';
+
+  function $(id) { return document.getElementById(id); }
+
+  function waitForOptions(sel, timeout = 4000) {
+    return new Promise(resolve => {
+      if (!sel) return resolve(false);
+      if (sel.options && sel.options.length > 0) return resolve(true);
+      const start = Date.now();
+      const iv = setInterval(() => {
+        if (sel.options && sel.options.length > 0) { clearInterval(iv); return resolve(true); }
+        if (Date.now() - start > timeout) { clearInterval(iv); return resolve(false); }
+      }, 80);
+    });
+  }
+
+  function applyAE(selectEl, prefixEl, phoneEl, hiddenEl) {
+    if (!selectEl) return;
+    // insert AE option if missing
+    let opt = selectEl.querySelector(`option[value="${AE_ISO}"]`);
+    if (!opt) {
+      opt = document.createElement('option');
+      opt.value = AE_ISO;
+      opt.dataset.dial = AE_DIAL;
+      opt.textContent = `United Arab Emirates (${AE_DIAL})`;
+      const insertIndex = (selectEl.options.length && selectEl.options[0].value === '') ? 1 : 0;
+      selectEl.add(opt, selectEl.options[insertIndex] || null);
+    }
+    // only set if user hasn't chosen anything yet
+    if (!selectEl.value) {
+      selectEl.value = AE_ISO;
+      selectEl.selectedIndex = Array.prototype.indexOf.call(selectEl.options, opt);
+      selectEl.dispatchEvent(new Event('change', { bubbles: true }));
+    }
+    if (prefixEl) prefixEl.value = AE_DIAL;
+    if (phoneEl) phoneEl.placeholder = `${AE_DIAL} 5xxxxxxx`;
+    if (hiddenEl) hiddenEl.value = AE_ISO;
+  }
+
+  async function run() {
+    const main = $(MAIN_ID);
+    const modal = $(MODAL_ID);
+    await Promise.all([ waitForOptions(main, 4000), waitForOptions(modal, 4000) ]);
+
+    // track whether user manually changed each select
+    const userChanged = new Map();
+    [main, modal].forEach(s => { if (s) userChanged.set(s, false); });
+
+    // attach user change listeners
+    [ {sel: main, prefix: $(PREFIX_MAIN_ID), phone: $(PHONE_MAIN_ID), hidden: $(HIDDEN_MAIN_ID)},
+      {sel: modal, prefix: $(PREFIX_MODAL_ID), phone: $(PHONE_MODAL_ID), hidden: $(HIDDEN_MODAL_ID)}
+    ].forEach(cfg => {
+      const sel = cfg.sel;
+      if (!sel) return;
+      sel.addEventListener('change', function () {
+        // mark user intent only if they actively changed (not programmatic)
+        userChanged.set(sel, true);
+        const opt = sel.selectedOptions && sel.selectedOptions[0];
+        const dial = opt ? (opt.dataset.dial || '') : '';
+        if (cfg.prefix) cfg.prefix.value = dial || '';
+        if (cfg.phone) cfg.phone.placeholder = dial ? `${dial} 5xxxxxxx` : 'Phone Number';
+        if (cfg.hidden) cfg.hidden.value = sel.value || '';
+      }, { passive: true });
+    });
+
+    // apply AE initially if empty
+    applyAE(main, $(PREFIX_MAIN_ID), $(PHONE_MAIN_ID), $(HIDDEN_MAIN_ID));
+    applyAE(modal, $(PREFIX_MODAL_ID), $(PHONE_MODAL_ID), $(HIDDEN_MODAL_ID));
+
+    // Observe programmatic changes and revert to AE unless user changed
+    function observeAndProtect(sel, prefixEl, phoneEl, hiddenEl) {
+      if (!sel) return;
+      const mo = new MutationObserver(muts => {
+        // if user changed, stop protecting
+        if (userChanged.get(sel)) { mo.disconnect(); return; }
+        // if value changed away from AE programmatically, revert
+        if (sel.value && sel.value !== AE_ISO) {
+          // revert to AE
+          const aeOpt = sel.querySelector(`option[value="${AE_ISO}"]`);
+          if (aeOpt) {
+            sel.value = AE_ISO;
+            sel.selectedIndex = Array.prototype.indexOf.call(sel.options, aeOpt);
+            sel.dispatchEvent(new Event('change', { bubbles: true }));
+            if (prefixEl) prefixEl.value = AE_DIAL;
+            if (phoneEl) phoneEl.placeholder = `${AE_DIAL} 5xxxxxxx`;
+            if (hiddenEl) hiddenEl.value = AE_ISO;
+          }
+        }
+      });
+      mo.observe(sel, { attributes: true, attributeFilter: ['value'] });
+      // also guard against direct property sets by polling briefly (short window)
+      let checks = 0;
+      const poll = setInterval(() => {
+        if (userChanged.get(sel) || checks++ > 40) { clearInterval(poll); mo.disconnect(); return; }
+        if (sel.value && sel.value !== AE_ISO) {
+          const aeOpt = sel.querySelector(`option[value="${AE_ISO}"]`);
+          if (aeOpt) {
+            sel.value = AE_ISO;
+            sel.selectedIndex = Array.prototype.indexOf.call(sel.options, aeOpt);
+            sel.dispatchEvent(new Event('change', { bubbles: true }));
+            if (prefixEl) prefixEl.value = AE_DIAL;
+            if (phoneEl) phoneEl.placeholder = `${AE_DIAL} 5xxxxxxx`;
+            if (hiddenEl) hiddenEl.value = AE_ISO;
+          }
+        }
+      }, 150);
+      // stop polling after 6 seconds
+      setTimeout(() => { clearInterval(poll); mo.disconnect(); }, 6000);
+    }
+
+    observeAndProtect(main, $(PREFIX_MAIN_ID), $(PHONE_MAIN_ID), $(HIDDEN_MAIN_ID));
+    observeAndProtect(modal, $(PREFIX_MODAL_ID), $(PHONE_MODAL_ID), $(HIDDEN_MODAL_ID));
+  }
+
+  // run without blocking
+  setTimeout(run, 30);
+})();
+
+
+
+
+
+
+(function () {
+  'use strict';
+
+  const FORM_ID = 'contactForm'; // change if your form uses a different id
+  const DEBUG = true;
+
+  function log(...args) { if (DEBUG) console.log('[form-guard]', ...args); }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    // Find form by id or fallback to first form
+    let form = document.getElementById(FORM_ID);
+    if (!form) {
+      form = document.querySelector('form');
+      if (!form) {
+        log('No form found on page. Aborting form guard.');
+        return;
+      }
+      log(`Form with id "${FORM_ID}" not found. Using first <form> on page.`);
+    } else {
+      log(`Using form #${FORM_ID}`);
+    }
+
+    // Prevent double submission
+    let submitting = false;
+
+    // Create or reuse error element next to field
+    function ensureErrorEl(field) {
+      const next = field.nextElementSibling;
+      if (next && next.classList && next.classList.contains('field-error')) return next;
+      const span = document.createElement('span');
+      span.className = 'field-error';
+      span.setAttribute('role', 'alert');
+      span.style.color = '#b00020';
+      span.style.fontSize = '0.9em';
+      span.style.marginLeft = '6px';
+      field.parentNode.insertBefore(span, field.nextSibling);
+      return span;
+    }
+
+    function setError(field, message) {
+      field.classList.add('error');
+      field.setAttribute('aria-invalid', 'true');
+      const el = ensureErrorEl(field);
+      el.textContent = message;
+      log('setError', field.name || field.id || field.type, message);
+    }
+
+    function clearError(field) {
+      field.classList.remove('error');
+      field.removeAttribute('aria-invalid');
+      const next = field.nextElementSibling;
+      if (next && next.classList && next.classList.contains('field-error')) next.textContent = '';
+    }
+
+    // Determine if a field should be validated
+    function isValidatable(field) {
+      if (!field) return false;
+      if (field.disabled) return false;
+      if (field.type === 'hidden') return false;
+      // ignore buttons
+      if (field.tagName === 'BUTTON') return false;
+      if (field.matches('[data-skip-validation]')) return false;
+      return true;
+    }
+
+    // Validate single field, return true if valid
+    function validateField(field) {
+      if (!isValidatable(field)) return true;
+
+      const required = field.hasAttribute('required') || field.dataset.required === 'true';
+      const value = (field.value || '').trim();
+
+      // If not required, but has value, still run type checks (email)
+      if (!required && value === '') {
+        clearError(field);
+        return true;
+      }
+
+      if (required && value === '') {
+        setError(field, 'This field is required.');
+        return false;
+      }
+
+      if (field.type === 'email' && value !== '') {
+        const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!re.test(value)) {
+          setError(field, 'Please enter a valid email address.');
+          return false;
+        }
+      }
+
+      if (field.type === 'tel' && value !== '') {
+        // basic phone check: digits, spaces, +, -, parentheses
+        const re = /^[0-9+\-\s()]{6,}$/;
+        if (!re.test(value)) {
+          setError(field, 'Please enter a valid phone number.');
+          return false;
+        }
+      }
+
+      // custom pattern attribute support
+      if (field.pattern && value !== '') {
+        try {
+          const pat = new RegExp('^' + field.pattern + '$');
+          if (!pat.test(value)) {
+            setError(field, 'Value does not match required format.');
+            return false;
+          }
+        } catch (err) {
+          // invalid pattern attribute; ignore
+          log('Invalid pattern on field', field, err);
+        }
+      }
+
+      clearError(field);
+      return true;
+    }
+
+    // Validate all relevant fields
+    function validateAll() {
+      const fields = Array.from(form.querySelectorAll('input, textarea, select'));
+      let firstInvalid = null;
+      let allValid = true;
+      fields.forEach(f => {
+        const ok = validateField(f);
+        if (!ok && !firstInvalid) firstInvalid = f;
+        allValid = allValid && ok;
+      });
+      return { valid: allValid, firstInvalid };
+    }
+
+    // Live validation: input and change events
+    form.addEventListener('input', (e) => {
+      const t = e.target;
+      if (t && (t.matches('input, textarea, select'))) {
+        validateField(t);
+      }
+    }, true);
+
+    form.addEventListener('change', (e) => {
+      const t = e.target;
+      if (t && (t.matches('input, textarea, select'))) {
+        validateField(t);
+      }
+    }, true);
+
+    // Intercept submit
+    form.addEventListener('submit', (e) => {
+      log('submit event triggered');
+      if (submitting) {
+        log('Submission blocked: already submitting');
+        e.preventDefault();
+        return;
+      }
+
+      const result = validateAll();
+      if (!result.valid) {
+        e.preventDefault();
+        if (result.firstInvalid) {
+          result.firstInvalid.focus({ preventScroll: false });
+        }
+        log('Submission blocked: validation failed');
+        return;
+      }
+
+      // If you use AJAX, you can skip the default submit here and handle manually.
+      // For normal submit, allow it but prevent double submit.
+      submitting = true;
+      // disable submit buttons to avoid double click
+      const submitButtons = form.querySelectorAll('button[type="submit"], input[type="submit"]');
+      submitButtons.forEach(b => b.disabled = true);
+
+      // If you want to re-enable after some time (e.g., server error), call:
+      // submitting = false; submitButtons.forEach(b => b.disabled = false);
+      log('Form passed validation, proceeding with submit');
+    });
+
+    // Optional: re-enable submit if user changes something after a failed attempt
+    form.addEventListener('input', () => {
+      const submitButtons = form.querySelectorAll('button[type="submit"], input[type="submit"]');
+      if (submitting) {
+        // do not auto re-enable while actual submit in progress
+        return;
+      }
+      submitButtons.forEach(b => b.disabled = false);
+    });
+
+    // Expose a debug function on the form for manual checks in console
+    form._validateNow = function () {
+      return validateAll();
+    };
+
+    log('Form guard initialized');
+  });
+})();
+
+
+
