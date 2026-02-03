@@ -3,89 +3,128 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contact Us - UAE Default</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intl-tel-input@18.2.1/build/css/intlTelInput.css">
-    
+    <title>Contact Form</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/css/intlTelInput.css"/>
     <style>
-        body { background-color: #f4f7f6; padding: 40px 15px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        .contact-card { max-width: 550px; margin: auto; padding: 40px; border-radius: 20px; background: #ffffff; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
-        .form-label { font-weight: 600; color: #444; }
-        /* Fix for intl-tel-input width in Bootstrap */
-        .iti { width: 100%; display: block; }
-        .btn-primary { padding: 12px; font-weight: 600; border-radius: 8px; background-color: #007bff; border: none; }
-        .btn-primary:hover { background-color: #0056b3; }
+        :root {
+            --primary-color: #2563eb; /* Modern Blue */
+            --text-dark: #1f2937;
+            --bg-light: #f9fafb;
+            --border-color: #d1d5db;
+        }
+
+        body { font-family: 'Inter', sans-serif; background: #fff; }
+
+        .form-container {
+            max-width: 500px;
+            margin: 40px auto;
+            padding: 32px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            border: 1px solid #eee;
+        }
+
+        .form-group { margin-bottom: 20px; }
+
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--text-dark);
+            font-size: 14px;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="tel"],
+        textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-size: 16px;
+            box-sizing: border-box;
+            transition: border-color 0.2s;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            ring: 2px solid rgba(37, 99, 235, 0.1);
+        }
+
+        /* Adjusting the width for the phone field due to the plugin */
+        .iti { width: 100%; }
+
+        .btn-submit {
+            width: 100%;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 14px;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .btn-submit:hover { background-color: #1d4ed8; }
+
+        .optional-tag {
+            font-weight: 400;
+            color: #6b7280;
+            font-size: 12px;
+        }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <div class="contact-card">
-        <h2 class="text-center mb-4">Contact Our Team</h2>
-        <form id="contactForm">
-            <div class="mb-3">
-                <label for="userName" class="form-label">Your Name</label>
-                <input type="text" class="form-control form-control-lg" id="userName" placeholder="Enter your full name" required>
-            </div>
+<div class="form-container">
+    <form id="contactForm">
+        <div class="form-group">
+            <label for="name">Your Name</label>
+            <input type="text" id="name" name="name" placeholder="John Doe" required>
+        </div>
 
-            <div class="mb-3">
-                <label for="phone" class="form-label d-block">Phone Number</label>
-                <input type="tel" class="form-control form-control-lg" id="phone" required>
-            </div>
+        <div class="form-group">
+            <label for="email">Email Address</label>
+            <input type="email" id="email" name="email" placeholder="john@example.com" required>
+        </div>
 
-            <div class="mb-3">
-                <label for="email" class="form-label">Email Address</label>
-                <input type="email" class="form-control form-control-lg" id="email" placeholder="email@domain.com" required>
-            </div>
+        <div class="form-group">
+            <label for="phone">Phone Number</label>
+            <input type="tel" id="phone" name="phone" required>
+        </div>
 
-            <div class="mb-4">
-                <label for="message" class="form-label">What are you looking for?</label>
-                <textarea class="form-control" id="message" rows="4" placeholder="Briefly describe your requirements..."></textarea>
-            </div>
+        <div class="form-group">
+            <label for="job_title">Job Title</label>
+            <input type="text" id="job_title" name="job_title" placeholder="e.g. Manager" required>
+        </div>
 
-            <button type="submit" class="btn btn-primary w-100">Submit Inquiry</button>
-        </form>
-    </div>
+        <div class="form-group">
+            <label for="looking_for">What You are looking for <span class="optional-tag">(Optional)</span></label>
+            <textarea id="looking_for" name="looking_for" rows="3" placeholder="Tell us more..."></textarea>
+        </div>
+
+        <button type="submit" class="btn-submit">Submit Request</button>
+    </form>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/intl-tel-input@18.2.1/build/js/intlTelInput.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script>
 <script>
     const phoneInputField = document.querySelector("#phone");
     
-    // Initialize the plugin
     const phoneInput = window.intlTelInput(phoneInputField, {
-        // Preferred countries to show at the top
-        preferredCountries: ["ae", "sa", "gb"],
+        // Automatically select country based on IP
         initialCountry: "auto",
         geoIpLookup: function(success, failure) {
             fetch("https://ipapi.co/json")
                 .then(res => res.json())
                 .then(data => success(data.country_code))
-                // Changed default to 'ae' for UAE on error
-                .catch(() => success("ae")); 
+                .catch(() => success("ae")); // Fallback to UAE if IP detection fails
         },
-        utilsScript: "https://cdn.jsdelivr.net/npm/intl-tel-input@18.2.1/build/js/utils.js",
-    });
-
-    // Handle Form Submission
-    document.getElementById('contactForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-        
-        // Validation check for the phone number
-        if (!phoneInput.isValidNumber()) {
-            alert("Please enter a valid phone number for the selected country.");
-            return;
-        }
-
-        const formData = {
-            name: document.getElementById('userName').value,
-            phone: phoneInput.getNumber(), // Formats to E.164 (e.g., +971501234567)
-            email: document.getElementById('email').value,
-            message: document.getElementById('message').value
-        };
-
-        console.log("Submission Data:", formData);
-        alert("Thank you! Your request has been sent.");
+        utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
     });
 </script>
 
