@@ -318,7 +318,8 @@ document.addEventListener('DOMContentLoaded', function () {
     selectEl.value = iso;
     const dial = opt.dataset.dial || '';
     if (prefixEl) prefixEl.value = dial;
-    if (phoneEl) phoneEl.placeholder = dial ? `${dial} 5xxxxxxx` : 'Phone Number';
+    if (phoneEl) phoneEl.placeholder = '5xxxxxxx';
+
     return true;
   }
 
@@ -364,7 +365,8 @@ if (typeof setSelectByIso === 'function') {
     mainSelect.addEventListener('change', function () {
       const dial = this.selectedOptions[0] ? this.selectedOptions[0].dataset.dial : '';
       mainPrefix.value = dial || '';
-      if (mainPhone) mainPhone.placeholder = dial ? `${dial} 5xxxxxxx` : 'Phone Number';
+      if (mainPhone) mainPhone.placeholder = '5xxxxxxx';
+
     });
     mainPhone.addEventListener('blur', function () {
       this.value = normalizeNumber(this.value, mainSelect);
@@ -426,7 +428,8 @@ if (typeof setSelectByIso === 'function') {
     modalSelect.addEventListener('change', function () {
       const dial = this.selectedOptions[0] ? this.selectedOptions[0].dataset.dial : '';
       modalPrefix.value = dial || '';
-      if (modalPhone) modalPhone.placeholder = dial ? `${dial} 5xxxxxxx` : 'Phone Number';
+      if (modalPhone) modalPhone.placeholder = '5xxxxxxx';
+
     });
     modalPhone.addEventListener('blur', function () {
       this.value = normalizeNumber(this.value, modalSelect);
@@ -438,39 +441,76 @@ if (typeof setSelectByIso === 'function') {
      CLEAN FORM SUBMIT HANDLERS
      — allow normal send-mail.php
   ===================== */
-  function attachSubmit(form, sel, phoneEl) {
-    if (!form) return;
-    form.addEventListener('submit', function (e) {
+function attachSubmit(form, sel, phoneEl) {
+  if (!form) return;
+  form.addEventListener('submit', function (e) {
 
-      // normalize before submit
-      if (phoneEl) phoneEl.value = normalizeNumber(phoneEl.value, sel);
+    // normalize before submit
+    if (phoneEl) phoneEl.value = normalizeNumber(phoneEl.value, sel);
 
-      // basic validation
-      const name = this.querySelector('[name="name"]');
-      const email = this.querySelector('[name="email"]');
+    // basic validation
+    const name = this.querySelector('[name="name"]');
+    const email = this.querySelector('[name="email"]');
 
-      if (!name || !name.value.trim()) {
-        alert('Please enter your name');
+    // job title: support select or input with common names/ids/classes
+    const jobSelectors = [
+      '[name="job_title"]',
+      '[name="jobTitle"]',
+      '#job-title',
+      '.job-title',
+      'select[name="job_title"]',
+      'select[name="jobTitle"]'
+    ];
+    let job = null;
+    for (let s of jobSelectors) {
+      job = this.querySelector(s);
+      if (job) break;
+    }
+
+    // helper to check emptiness for select/input
+    function isEmptyField(f) {
+      if (!f) return true;
+      if (f.tagName === 'SELECT') {
+        const v = f.value || '';
+        return v.trim() === '';
+      }
+      return !(f.value && f.value.trim());
+    }
+
+    if (!name || !name.value.trim()) {
+      alert('Please enter your name');
+      e.preventDefault();
+      name && name.focus();
+      return;
+    }
+    if (!email || !email.value.trim()) {
+      alert('Please enter your email');
+      e.preventDefault();
+      email && email.focus();
+      return;
+    }
+    if (!phoneEl || !phoneEl.value.trim()) {
+      alert('Please enter phone number');
+      e.preventDefault();
+      phoneEl && phoneEl.focus();
+      return;
+    }
+
+    // job title validation (only if job field exists on this form)
+    if (job) {
+      if (isEmptyField(job)) {
+        const msg = job.tagName === 'SELECT' ? 'Please select your job title' : 'Please enter your job title';
+        alert(msg);
         e.preventDefault();
-        name && name.focus();
+        job.focus();
         return;
       }
-      if (!email || !email.value.trim()) {
-        alert('Please enter your email');
-        e.preventDefault();
-        email && email.focus();
-        return;
-      }
-      if (!phoneEl || !phoneEl.value.trim()) {
-        alert('Please enter phone number');
-        e.preventDefault();
-        phoneEl && phoneEl.focus();
-        return;
-      }
+    }
 
-      // no preventDefault → normal submit happens
-    });
-  }
+    // no preventDefault → normal submit happens
+  });
+}
+
 
   attachSubmit($('#main-form'), mainSelect, mainPhone);
   attachSubmit($('#modal-quote-form'), modalSelect, modalPhone);
@@ -647,7 +687,8 @@ if (typeof setSelectByIso === 'function') {
       selectEl.dispatchEvent(new Event('change', { bubbles: true }));
     }
     if (prefixEl) prefixEl.value = AE_DIAL;
-    if (phoneEl) phoneEl.placeholder = `${AE_DIAL} 5xxxxxxx`;
+    if (phoneEl) phoneEl.placeholder = '5xxxxxxx';
+
     if (hiddenEl) hiddenEl.value = AE_ISO;
   }
 
@@ -696,7 +737,8 @@ if (typeof setSelectByIso === 'function') {
             sel.selectedIndex = Array.prototype.indexOf.call(sel.options, aeOpt);
             sel.dispatchEvent(new Event('change', { bubbles: true }));
             if (prefixEl) prefixEl.value = AE_DIAL;
-            if (phoneEl) phoneEl.placeholder = `${AE_DIAL} 5xxxxxxx`;
+            if (phoneEl) phoneEl.placeholder = '5xxxxxxx';
+
             if (hiddenEl) hiddenEl.value = AE_ISO;
           }
         }
@@ -713,7 +755,8 @@ if (typeof setSelectByIso === 'function') {
             sel.selectedIndex = Array.prototype.indexOf.call(sel.options, aeOpt);
             sel.dispatchEvent(new Event('change', { bubbles: true }));
             if (prefixEl) prefixEl.value = AE_DIAL;
-            if (phoneEl) phoneEl.placeholder = `${AE_DIAL} 5xxxxxxx`;
+            if (phoneEl) phoneEl.placeholder = '5xxxxxxx';
+
             if (hiddenEl) hiddenEl.value = AE_ISO;
           }
         }
@@ -933,3 +976,155 @@ if (typeof setSelectByIso === 'function') {
 
 
 
+// Modal + page form unified validation (drop-in)
+(function () {
+  'use strict';
+
+  const FORM_SELECTORS = ['form.instant-form', '#modal-quote-form']; // targets inline form(s) and modal form
+  const DEBUG = false;
+
+  function log(...args) { if (DEBUG) console.log('[form-validate]', ...args); }
+
+  function ensureErrorEl(field) {
+    const next = field.nextElementSibling;
+    if (next && next.classList && next.classList.contains('field-error')) return next;
+    const span = document.createElement('span');
+    span.className = 'field-error';
+    span.setAttribute('role', 'alert');
+    span.style.color = '#b00020';
+    span.style.fontSize = '0.9em';
+    span.style.marginLeft = '6px';
+    field.parentNode.insertBefore(span, field.nextSibling);
+    return span;
+  }
+
+  function setError(field, message) {
+    field.classList.add('error');
+    field.setAttribute('aria-invalid', 'true');
+    ensureErrorEl(field).textContent = message;
+    log('error', field.name || field.id || field.tagName, message);
+  }
+
+  function clearError(field) {
+    field.classList.remove('error');
+    field.removeAttribute('aria-invalid');
+    const next = field.nextElementSibling;
+    if (next && next.classList && next.classList.contains('field-error')) next.textContent = '';
+  }
+
+  function isValidatable(field) {
+    if (!field) return false;
+    if (field.disabled) return false;
+    if (field.type === 'hidden') return false;
+    if (field.tagName === 'BUTTON') return false;
+    if (field.matches('[data-skip-validation]')) return false;
+    return true;
+  }
+
+  function validateField(field) {
+    if (!isValidatable(field)) return true;
+    const required = field.hasAttribute('required') || field.dataset.required === 'true';
+    const value = (field.value || '').trim();
+
+    // Special: treat select with empty value as invalid when required
+    if (field.tagName === 'SELECT') {
+      if (required && (value === '' || value === null)) {
+        setError(field, 'Please select an option.');
+        return false;
+      }
+      clearError(field);
+      return true;
+    }
+
+    if (!required && value === '') {
+      clearError(field);
+      return true;
+    }
+
+    if (required && value === '') {
+      setError(field, 'This field is required.');
+      return false;
+    }
+
+    if (field.type === 'email' && value !== '') {
+      const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!re.test(value)) { setError(field, 'Please enter a valid email address.'); return false; }
+    }
+
+    // Example: job title custom check (if you have a select or input for job title)
+    if ((field.name && /job[_-]?title/i.test(field.name)) || (field.id && /job[_-]?title/i.test(field.id)) || field.classList.contains('job-title')) {
+      if (value === '') { setError(field, 'Please enter/select job title.'); return false; }
+    }
+
+    clearError(field);
+    return true;
+  }
+
+  function validateAll(form) {
+    const fields = Array.from(form.querySelectorAll('input, textarea, select'));
+    let firstInvalid = null;
+    let allValid = true;
+    fields.forEach(f => {
+      const ok = validateField(f);
+      if (!ok && !firstInvalid) firstInvalid = f;
+      allValid = allValid && ok;
+    });
+    return { valid: allValid, firstInvalid };
+  }
+
+  function attachToForm(form) {
+    let submitting = false;
+
+    form.addEventListener('input', (e) => {
+      const t = e.target;
+      if (t && t.matches('input, textarea, select')) validateField(t);
+    }, true);
+
+    form.addEventListener('change', (e) => {
+      const t = e.target;
+      if (t && t.matches('input, textarea, select')) validateField(t);
+    }, true);
+
+    form.addEventListener('submit', (e) => {
+      if (submitting) { e.preventDefault(); return; }
+      const res = validateAll(form);
+      if (!res.valid) {
+        e.preventDefault();
+        if (res.firstInvalid) res.firstInvalid.focus({ preventScroll: false });
+        return;
+      }
+      // prevent double submit
+      submitting = true;
+      form.querySelectorAll('button[type="submit"], input[type="submit"]').forEach(b => b.disabled = true);
+    });
+
+    // clear errors on reset
+    form.addEventListener('reset', () => {
+      Array.from(form.querySelectorAll('input, textarea, select')).forEach(clearError);
+      form.querySelectorAll('button[type="submit"], input[type="submit"]').forEach(b => b.disabled = false);
+      submitting = false;
+    });
+
+    // If form is inside a modal, clear errors when modal closes (custom event)
+    const modal = form.closest('.modal');
+    if (modal) {
+      modal.addEventListener('modalhidden', () => {
+        Array.from(form.querySelectorAll('input, textarea, select')).forEach(clearError);
+        form.querySelectorAll('button[type="submit"], input[type="submit"]').forEach(b => b.disabled = false);
+      });
+      // also listen for close button if present
+      const closeBtn = modal.querySelector('.close-modal');
+      if (closeBtn) closeBtn.addEventListener('click', () => modal.dispatchEvent(new Event('modalhidden')));
+    }
+  }
+
+  // initialize
+  document.addEventListener('DOMContentLoaded', () => {
+    const selector = FORM_SELECTORS.join(',');
+    document.querySelectorAll(selector).forEach(form => attachToForm(form));
+    // fallback: ensure modal form id is attached even if not matching class
+    const modalForm = document.getElementById('modal-quote-form');
+    if (modalForm) attachToForm(modalForm);
+    log('validation attached');
+  });
+})();
