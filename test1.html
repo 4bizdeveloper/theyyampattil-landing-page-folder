@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Form</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/css/intlTelInput.css"/>
+    <style>
+        :root {
+            --primary-color: #2563eb; /* Modern Blue */
+            --text-dark: #1f2937;
+            --bg-light: #f9fafb;
+            --border-color: #d1d5db;
+        }
+
+        body { font-family: 'Inter', sans-serif; background: #fff; }
+
+        .form-container {
+            max-width: 500px;
+            margin: 40px auto;
+            padding: 32px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            border: 1px solid #eee;
+        }
+
+        .form-group { margin-bottom: 20px; }
+
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--text-dark);
+            font-size: 14px;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="tel"],
+        textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-size: 16px;
+            box-sizing: border-box;
+            transition: border-color 0.2s;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            ring: 2px solid rgba(37, 99, 235, 0.1);
+        }
+
+        /* Adjusting the width for the phone field due to the plugin */
+        .iti { width: 100%; }
+
+        .btn-submit {
+            width: 100%;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 14px;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .btn-submit:hover { background-color: #1d4ed8; }
+
+        .optional-tag {
+            font-weight: 400;
+            color: #6b7280;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="form-container">
+    <form id="contactForm">
+        <div class="form-group">
+            <label for="name">Your Name</label>
+            <input type="text" id="name" name="name" placeholder="John Doe" required>
+        </div>
+
+        <div class="form-group">
+            <label for="email">Email Address</label>
+            <input type="email" id="email" name="email" placeholder="john@example.com" required>
+        </div>
+
+        <div class="form-group">
+            <label for="phone">Phone Number</label>
+            <input type="tel" id="phone" name="phone" required>
+        </div>
+
+        <div class="form-group">
+            <label for="job_title">Job Title</label>
+            <input type="text" id="job_title" name="job_title" placeholder="e.g. Manager" required>
+        </div>
+
+        <div class="form-group">
+            <label for="looking_for">What You are looking for <span class="optional-tag">(Optional)</span></label>
+            <textarea id="looking_for" name="looking_for" rows="3" placeholder="Tell us more..."></textarea>
+        </div>
+
+        <button type="submit" class="btn-submit">Submit Request</button>
+    </form>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script>
+<script>
+    const phoneInputField = document.querySelector("#phone");
+    
+    const phoneInput = window.intlTelInput(phoneInputField, {
+        // Automatically select country based on IP
+        initialCountry: "auto",
+        geoIpLookup: function(success, failure) {
+            fetch("https://ipapi.co/json")
+                .then(res => res.json())
+                .then(data => success(data.country_code))
+                .catch(() => success("ae")); // Fallback to UAE if IP detection fails
+        },
+        utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
+    });
+</script>
+
+</body>
+</html>

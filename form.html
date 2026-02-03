@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - UAE Default</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intl-tel-input@18.2.1/build/css/intlTelInput.css">
+    
+    <style>
+        body { background-color: #f4f7f6; padding: 40px 15px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        .contact-card { max-width: 550px; margin: auto; padding: 40px; border-radius: 20px; background: #ffffff; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
+        .form-label { font-weight: 600; color: #444; }
+        /* Fix for intl-tel-input width in Bootstrap */
+        .iti { width: 100%; display: block; }
+        .btn-primary { padding: 12px; font-weight: 600; border-radius: 8px; background-color: #007bff; border: none; }
+        .btn-primary:hover { background-color: #0056b3; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="contact-card">
+        <h2 class="text-center mb-4">Contact Our Team</h2>
+        <form id="contactForm">
+            <div class="mb-3">
+                <label for="userName" class="form-label">Your Name</label>
+                <input type="text" class="form-control form-control-lg" id="userName" placeholder="Enter your full name" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="phone" class="form-label d-block">Phone Number</label>
+                <input type="tel" class="form-control form-control-lg" id="phone" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="email" class="form-label">Email Address</label>
+                <input type="email" class="form-control form-control-lg" id="email" placeholder="email@domain.com" required>
+            </div>
+
+            <div class="mb-4">
+                <label for="message" class="form-label">What are you looking for?</label>
+                <textarea class="form-control" id="message" rows="4" placeholder="Briefly describe your requirements..."></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100">Submit Inquiry</button>
+        </form>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/intl-tel-input@18.2.1/build/js/intlTelInput.min.js"></script>
+<script>
+    const phoneInputField = document.querySelector("#phone");
+    
+    // Initialize the plugin
+    const phoneInput = window.intlTelInput(phoneInputField, {
+        // Preferred countries to show at the top
+        preferredCountries: ["ae", "sa", "gb"],
+        initialCountry: "auto",
+        geoIpLookup: function(success, failure) {
+            fetch("https://ipapi.co/json")
+                .then(res => res.json())
+                .then(data => success(data.country_code))
+                // Changed default to 'ae' for UAE on error
+                .catch(() => success("ae")); 
+        },
+        utilsScript: "https://cdn.jsdelivr.net/npm/intl-tel-input@18.2.1/build/js/utils.js",
+    });
+
+    // Handle Form Submission
+    document.getElementById('contactForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        // Validation check for the phone number
+        if (!phoneInput.isValidNumber()) {
+            alert("Please enter a valid phone number for the selected country.");
+            return;
+        }
+
+        const formData = {
+            name: document.getElementById('userName').value,
+            phone: phoneInput.getNumber(), // Formats to E.164 (e.g., +971501234567)
+            email: document.getElementById('email').value,
+            message: document.getElementById('message').value
+        };
+
+        console.log("Submission Data:", formData);
+        alert("Thank you! Your request has been sent.");
+    });
+</script>
+
+</body>
+</html>
