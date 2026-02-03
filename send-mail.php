@@ -35,6 +35,7 @@ if (!empty($_POST['hp'])) {
 $name    = trim($_POST['name'] ?? '');
 $email   = trim($_POST['email'] ?? '');
 $phone   = trim($_POST['phone'] ?? '');
+$job     = trim($_POST['job'] ?? '');
 $message = trim($_POST['message'] ?? '');
 $country = strtoupper(trim($_POST['country'] ?? ''));
 
@@ -128,6 +129,7 @@ $bodyHtml = "
         <p><strong>Email:</strong> <a href='mailto:" . htmlspecialchars($email, ENT_QUOTES, 'UTF-8') . "'>" . htmlspecialchars($email, ENT_QUOTES, 'UTF-8') . "</a></p>
         <p><strong>Phone:</strong> " . htmlspecialchars($phone, ENT_QUOTES, 'UTF-8') . "</p>" .
         ($country ? "<p><strong>Country:</strong> " . htmlspecialchars($country, ENT_QUOTES, 'UTF-8') . "</p>" : "") . "
+        <p><strong>Job title:</strong> " . htmlspecialchars($job, ENT_QUOTES, 'UTF-8') . "</p>
       </div>
       <div class='message'>
         <strong>Message:</strong>

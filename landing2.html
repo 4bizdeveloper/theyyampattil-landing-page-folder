@@ -24,129 +24,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-P2RFQ7QR');</script>
 <!-- End Google Tag Manager -->
 
-
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/css/intlTelInput.css"/>
-
-
-<style>
-
-
-
-
-/* ---------- Strong in-page override (use as-is) ---------- */
-
-/* Closed select: dark background, white selected value */
-select#country-code,
-select.country-select,
-select.form-select,
-select {
-  background-color: #0f1724 !important;
-  color: #000 !important;
-  -webkit-text-fill-color: #000 !important; /* Safari */
-  border: 1px solid rgba(255,255,255,0.12) !important;
-  padding: 0.45rem 0.75rem !important;
-  border-radius: 8px !important;
-  -webkit-appearance: none !important;
-  -moz-appearance: none !important;
-  appearance: none !important;
-}
-
-/* Dropdown options: light background, dark text (CSS attempt) */
-select#country-code option,
-select.country-select option,
-select.form-select option,
-select option {
-  background-color: #000 !important;
-  color: #111111 !important;
-}
-
-/* Focus outline for accessibility */
-select#country-code:focus,
-select.country-select:focus,
-select.form-select:focus,
-select:focus {
-  outline: 3px solid rgba(99,102,241,0.14) !important;
-  outline-offset: 2px !important;
-}
-
-/* Hide MS expand arrow if using custom arrow */
-select::-ms-expand { display: none !important; }
-
-/* Small-screen tweak */
-@media (max-width: 480px) {
-  select#country-code,
-  select.country-select,
-  select.form-select,
-  select {
-    font-size: 15px !important;
-    padding-right: 2rem !important;
-  }
-}
-
-/* ---------- Submit button override (in-page) ---------- */
-/* Replace selectors with your button's class or keep generic button[type="submit"] */
-button[type="submit"],
-button.btn-submit,
-input[type="submit"] {
-  background: linear-gradient(90deg,#0ea5a4 0%,#06b6d4 100%) !important;
-  color: #ffffff !important;
-  border: none !important;
-  padding: 0.75rem 1.25rem !important;
-  font-weight: 600 !important;
-  border-radius: 10px !important;
-  box-shadow: 0 6px 18px rgba(6,182,212,0.18) !important;
-  cursor: pointer !important;
-  transition: transform 120ms ease, box-shadow 120ms ease, opacity 120ms ease !important;
-}
-
-/* Hover / active states */
-button[type="submit"]:hover,
-button.btn-submit:hover,
-input[type="submit"]:hover {
-  transform: translateY(-2px) !important;
-  box-shadow: 0 10px 24px rgba(6,182,212,0.22) !important;
-}
-
-button[type="submit"]:active,
-button.btn-submit:active,
-input[type="submit"]:active {
-  transform: translateY(0) !important;
-  box-shadow: 0 6px 12px rgba(6,182,212,0.14) !important;
-}
-
-/* Disabled state */
-button[type="submit"][disabled],
-button.btn-submit[disabled],
-input[type="submit"][disabled] {
-  opacity: 0.55 !important;
-  cursor: not-allowed !important;
-  box-shadow: none !important;
-  transform: none !important;
-}
-
-/* ---------- Small-screen tweaks ---------- */
-@media (max-width: 480px) {
-  select#country-code,
-  select.country-select,
-  select.form-select,
-  select {
-    padding-right: 2.25rem !important; /* leave space for native arrow */
-    font-size: 15px !important;
-  }
-
-  button[type="submit"],
-  button.btn-submit,
-  input[type="submit"] {
-    width: 100% !important;
-    padding: 0.85rem 1rem !important;
-  }
-}
-</style>
-
-
-
-
-
 </head>
 <body>
 
@@ -186,7 +63,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       </ul>
     </nav>
 
-    <div class="header-ctas">
+    <!-- <div class="header-ctas">
       <a href="https://wa.me/971559132200" class="cta cta-wa" aria-label="Chat on WhatsApp">
         <i class="fab fa-whatsapp" aria-hidden="true"></i>
         <span class="cta-text">WhatsApp</span>
@@ -196,7 +73,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <i class="fa fa-phone" aria-hidden="true"></i>
         <span class="cta-text">+971 55 913 2200</span>
       </a>
-    </div>
+    </div> -->
   </div>
 </header>
 
@@ -217,42 +94,45 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             <div class="hero-form-container">
              
               
-<!-- main form form1 start    -->
-         
-<form id="contactForm" action="send-mail.php" method="POST" class="instant-form" novalidate>
-        <div class="form-group">
-            <label for="name">Your Name</label>
-            <input type="text" id="name" name="name" placeholder="John Doe" required>
-        </div>
+<!-- form1 start    -->
+<form action="send-mail.php" method="POST" class="instant-form" novalidate>
+  <h3>Get a Free Quote</h3>
 
-        <div class="form-group">
-            <label for="email">Email Address</label>
-            <input type="email" id="email" name="email" placeholder="john@example.com" required>
-        </div>
+  <!-- Hidden ISO country code (AE, SA, IN, etc.) sent to server -->
+  <input type="hidden" id="country" name="country" value="">
 
-        <div class="form-group">
-            <label for="phone">Phone Number</label><br>
-            <input type="tel" id="phone" name="phone" required>
-        </div>
+  <label class="sr-only" for="name">Your name</label>
+  <input id="name" name="name" type="text" placeholder="Your Name" required autocomplete="name">
 
-        <div class="form-group">
-            <label for="job_title">Job Title</label>
-            <input type="text" id="job_title" name="job_title" placeholder="e.g. Manager" required>
-        </div>
+   <!-- Country selector (auto-populated by JS) -->
+  <label for="country-select" class="sr-only">Country</label>
+  <select id="country-select" name="country_select" aria-label="Country" required>
+    <option value="">Select country</option>
+  </select>
+  <label class="sr-only" for="phone">Phone number</label>
+  <div style="display:flex;gap:8px;align-items:center;">
+    <input id="phone-prefix" readonly style="width:110px;padding:8px;border:1px solid #ccc;border-radius:4px;background:#f7f7f7;text-align:center;" aria-hidden="true">
+    <input id="phone" name="phone" type="tel" placeholder="Phone Number" required autocomplete="tel" style="flex:1;">
+  </div>
 
-        <div class="form-group">
-            <label for="looking_for">What You are looking for <span class="optional-tag">(Optional)</span></label>
-            <textarea id="looking_for" name="looking_for" rows="3" placeholder="Tell us more..."></textarea>
-        </div>
-
-        <button type="submit" class="btn-submit">Submit Request</button>
-    </form>
+<label class="sr-only" for="job">Your job title</label>
+  <input id="job" name="job" type="text" placeholder="Your job title" required autocomplete="job"> 
 
 
+  <label class="sr-only" for="email">Email</label>
+  <input id="email" name="email" type="email" placeholder="Email Address" required autocomplete="email">
 
+  <label class="sr-only" for="message">Message</label>
+  <textarea id="message" name="message" placeholder="What are you looking for (optional)?" rows="4"></textarea>
 
+  <!-- Honeypot anti-spam -->
+  <input type="text" name="hp" style="display:none" tabindex="-1" autocomplete="off">
 
+  <!-- Inline status message -->
+  <div class="form-msg" aria-live="polite" style="margin-top:8px;"></div>
 
+  <button type="submit" class="submit-btn">GET PRICING NOW</button>
+</form>
 <!-- form1 end  -->
 
 
@@ -275,8 +155,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <div class="product-info">
           <h3 class="product-title">Modern Doors</h3>
           <div class="card-actions">
-            <a class="btn-wa" href="https://wa.me/971559132200" aria-label="WhatsApp Modern Doors"><i class="fab fa-whatsapp"></i><span>WhatsApp</span></a>
-            <a class="btn-call" href="tel:+971559132200" aria-label="Call about Modern Doors"><i class="fa fa-phone"></i><span>Call</span></a>
+            <!-- <a class="btn-wa" href="https://wa.me/971559132200" aria-label="WhatsApp Modern Doors"><i class="fab fa-whatsapp"></i><span>WhatsApp</span></a>
+            <a class="btn-call" href="tel:+971559132200" aria-label="Call about Modern Doors"><i class="fa fa-phone"></i><span>Call</span></a> -->
             <button class="btn-form open-modal" data-product="Modern Doors" aria-haspopup="dialog">📲 Inquire</button>
           </div>
         </div>
@@ -291,8 +171,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <div class="product-info">
           <h3 class="product-title">TV Wall</h3>
           <div class="card-actions">
-            <a class="btn-wa" href="https://wa.me/971559132200" aria-label="WhatsApp TV Wall"><i class="fab fa-whatsapp"></i><span>WhatsApp</span></a>
-            <a class="btn-call" href="tel:+971559132200" aria-label="Call about TV Wall"><i class="fa fa-phone"></i><span>Call</span></a>
+            <!-- <a class="btn-wa" href="https://wa.me/971559132200" aria-label="WhatsApp TV Wall"><i class="fab fa-whatsapp"></i><span>WhatsApp</span></a>
+            <a class="btn-call" href="tel:+971559132200" aria-label="Call about TV Wall"><i class="fa fa-phone"></i><span>Call</span></a> -->
             <button class="btn-form open-modal" data-product="TV Wall" aria-haspopup="dialog">📲 Inquire</button>
           </div>
         </div>
@@ -307,8 +187,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <div class="product-info">
           <h3 class="product-title">Kitchen</h3>
           <div class="card-actions">
-            <a class="btn-wa" href="https://wa.me/971559132200" aria-label="WhatsApp Kitchen"><i class="fab fa-whatsapp"></i><span>WhatsApp</span></a>
-            <a class="btn-call" href="tel:+971559132200" aria-label="Call about Kitchen"><i class="fa fa-phone"></i><span>Call</span></a>
+            <!-- <a class="btn-wa" href="https://wa.me/971559132200" aria-label="WhatsApp Kitchen"><i class="fab fa-whatsapp"></i><span>WhatsApp</span></a>
+            <a class="btn-call" href="tel:+971559132200" aria-label="Call about Kitchen"><i class="fa fa-phone"></i><span>Call</span></a> -->
             <button class="btn-form open-modal" data-product="Kitchen" aria-haspopup="dialog">📲 Inquire</button>
           </div>
         </div>
@@ -323,8 +203,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <div class="product-info">
           <h3 class="product-title">Walk-in Closets</h3>
           <div class="card-actions">
-            <a class="btn-wa" href="https://wa.me/971559132200" aria-label="WhatsApp Closets"><i class="fab fa-whatsapp"></i><span>WhatsApp</span></a>
-            <a class="btn-call" href="tel:+971559132200" aria-label="Call about Closets"><i class="fa fa-phone"></i><span>Call</span></a>
+            <!-- <a class="btn-wa" href="https://wa.me/971559132200" aria-label="WhatsApp Closets"><i class="fab fa-whatsapp"></i><span>WhatsApp</span></a>
+            <a class="btn-call" href="tel:+971559132200" aria-label="Call about Closets"><i class="fa fa-phone"></i><span>Call</span></a> -->
             <button class="btn-form open-modal" data-product="Closets" aria-haspopup="dialog">📲 Inquire</button>
           </div>
         </div>
@@ -339,8 +219,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <div class="product-info">
           <h3 class="product-title">Partition</h3>
           <div class="card-actions">
-            <a class="btn-wa" href="https://wa.me/971559132200" aria-label="WhatsApp Partition"><i class="fab fa-whatsapp"></i><span>WhatsApp</span></a>
-            <a class="btn-call" href="tel:+971559132200" aria-label="Call about Partition"><i class="fa fa-phone"></i><span>Call</span></a>
+            <!-- <a class="btn-wa" href="https://wa.me/971559132200" aria-label="WhatsApp Partition"><i class="fab fa-whatsapp"></i><span>WhatsApp</span></a>
+            <a class="btn-call" href="tel:+971559132200" aria-label="Call about Partition"><i class="fa fa-phone"></i><span>Call</span></a> -->
             <button class="btn-form open-modal" data-product="Partition" aria-haspopup="dialog">📲 Inquire</button>
           </div>
         </div>
@@ -355,8 +235,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <div class="product-info">
           <h3 class="product-title">Dressing Room</h3>
           <div class="card-actions">
-            <a class="btn-wa" href="https://wa.me/971559132200" aria-label="WhatsApp Dressing Room"><i class="fab fa-whatsapp"></i><span>WhatsApp</span></a>
-            <a class="btn-call" href="tel:+971559132200" aria-label="Call about Dressing Room"><i class="fa fa-phone"></i><span>Call</span></a>
+            <!-- <a class="btn-wa" href="https://wa.me/971559132200" aria-label="WhatsApp Dressing Room"><i class="fab fa-whatsapp"></i><span>WhatsApp</span></a>
+            <a class="btn-call" href="tel:+971559132200" aria-label="Call about Dressing Room"><i class="fa fa-phone"></i><span>Call</span></a> -->
             <button class="btn-form open-modal" data-product="Dressing Room" aria-haspopup="dialog">📲 Inquire</button>
           </div>
         </div>
@@ -371,8 +251,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <div class="product-info">
           <h3 class="product-title">Bed Panel</h3>
           <div class="card-actions">
-            <a class="btn-wa" href="https://wa.me/971559132200" aria-label="WhatsApp Bed Panel"><i class="fab fa-whatsapp"></i><span>WhatsApp</span></a>
-            <a class="btn-call" href="tel:+971559132200" aria-label="Call about Bed Panel"><i class="fa fa-phone"></i><span>Call</span></a>
+            <!-- <a class="btn-wa" href="https://wa.me/971559132200" aria-label="WhatsApp Bed Panel"><i class="fab fa-whatsapp"></i><span>WhatsApp</span></a>
+            <a class="btn-call" href="tel:+971559132200" aria-label="Call about Bed Panel"><i class="fa fa-phone"></i><span>Call</span></a> -->
             <button class="btn-form open-modal" data-product="Bed Panel" aria-haspopup="dialog">📲 Inquire</button>
           </div>
         </div>
@@ -387,8 +267,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <div class="product-info">
           <h3 class="product-title">Wall Panel</h3>
           <div class="card-actions">
-            <a class="btn-wa" href="https://wa.me/971559132200" aria-label="WhatsApp Wall Panel"><i class="fab fa-whatsapp"></i><span>WhatsApp</span></a>
-            <a class="btn-call" href="tel:+971559132200" aria-label="Call about Wall Panel"><i class="fa fa-phone"></i><span>Call</span></a>
+            <!-- <a class="btn-wa" href="https://wa.me/971559132200" aria-label="WhatsApp Wall Panel"><i class="fab fa-whatsapp"></i><span>WhatsApp</span></a>
+            <a class="btn-call" href="tel:+971559132200" aria-label="Call about Wall Panel"><i class="fa fa-phone"></i><span>Call</span></a> -->
             <button class="btn-form open-modal" data-product="Wall Panel" aria-haspopup="dialog">📲 Inquire</button>
           </div>
         </div>
@@ -403,8 +283,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <div class="product-info">
           <h3 class="product-title">Wall Cladding</h3>
           <div class="card-actions">
-            <a class="btn-wa" href="https://wa.me/971559132200" aria-label="WhatsApp Wall Cladding"><i class="fab fa-whatsapp"></i><span>WhatsApp</span></a>
-            <a class="btn-call" href="tel:+971559132200" aria-label="Call about Wall Cladding"><i class="fa fa-phone"></i><span>Call</span></a>
+            <!-- <a class="btn-wa" href="https://wa.me/971559132200" aria-label="WhatsApp Wall Cladding"><i class="fab fa-whatsapp"></i><span>WhatsApp</span></a>
+            <a class="btn-call" href="tel:+971559132200" aria-label="Call about Wall Cladding"><i class="fa fa-phone"></i><span>Call</span></a> -->
             <button class="btn-form open-modal" data-product="Wall Cladding" aria-haspopup="dialog">📲 Inquire</button>
           </div>
         </div>
@@ -419,8 +299,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <div class="product-info">
           <h3 class="product-title">Welcome Unit</h3>
           <div class="card-actions">
-            <a class="btn-wa" href="https://wa.me/971559132200" aria-label="WhatsApp Welcome Unit"><i class="fab fa-whatsapp"></i><span>WhatsApp</span></a>
-            <a class="btn-call" href="tel:+971559132200" aria-label="Call about Welcome Unit"><i class="fa fa-phone"></i><span>Call</span></a>
+            <!-- <a class="btn-wa" href="https://wa.me/971559132200" aria-label="WhatsApp Welcome Unit"><i class="fab fa-whatsapp"></i><span>WhatsApp</span></a>
+            <a class="btn-call" href="tel:+971559132200" aria-label="Call about Welcome Unit"><i class="fa fa-phone"></i><span>Call</span></a> -->
             <button class="btn-form open-modal" data-product="Welcome Unit" aria-haspopup="dialog">📲 Inquire</button>
           </div>
         </div>
@@ -430,18 +310,13 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 </section>
 
 
-  <!-- Contact Modal (replace existing modal markup) -->
+  <!-- Contact Modal form (replace existing modal markup) -->
 <div id="contactModal" class="modal" aria-hidden="true" role="dialog" aria-labelledby="contactModalTitle">
   <div class="modal-content" role="document">
     <button class="close-modal" aria-label="Close" id="contactModalClose">&times;</button>
-
-
-
-    <!-- modal form  -->
-
+    
     <form id="modal-quote-form" class="instant-form" action="send-mail.php" method="POST" novalidate>
       <h3 id="contactModalTitle">Get a Free Quote</h3>
-
 
       <label class="sr-only" for="modal-name">Your name</label>
       <input id="modal-name" name="name" type="text" placeholder="Your Name" required autocomplete="name">
@@ -462,11 +337,15 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <label class="sr-only" for="modal-phone">Phone number</label>
       <input id="modal-phone" name="phone" type="tel" placeholder="Phone Number" required autocomplete="tel">
 
+    <label class="sr-only" for="job">Your job title</label>
+     <input id="job" name="job" type="text" placeholder="Your job title" required autocomplete="job">
+
+
       <label class="sr-only" for="modal-email">Email</label>
       <input id="modal-email" name="email" type="email" placeholder="Email Address" required autocomplete="email">
 
       <label class="sr-only" for="modal-message">Message</label>
-      <textarea id="modal-message" name="message" placeholder="What are you looking for?" rows="4"></textarea>
+      <textarea id="modal-message" name="message" placeholder="What are you looking for (optional)?" rows="4"></textarea>
 
       <!-- Honeypot anti-spam -->
       <input type="text" name="hp" style="display:none" tabindex="-1" autocomplete="off">
@@ -487,10 +366,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <!-- Swapped: right-column content now appears first (left side) -->
     <div class="footer-right footer-legal-block">
       <p class="small muted">Questions or custom requests? Call or WhatsApp Theyyampattil Furniture.</p>
-      <div class="footer-ctas">
+      <!-- <div class="footer-ctas">
         <a href="https://wa.me/971559132200" class="btn btn-wa" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i> WhatsApp</a>
         <a href="tel:+971559132200" class="btn btn-call" aria-label="Call"><i class="fa fa-phone"></i> Call</a>
-      </div>
+      </div> -->
     </div>
 
 
@@ -648,27 +527,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   })();
 </script>
 
-<!-- form script -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script>
-<script>
-    const phoneInputField = document.querySelector("#phone");
-    
-    const phoneInput = window.intlTelInput(phoneInputField, {
-        // Automatically select country based on IP
-        initialCountry: "auto",
-        geoIpLookup: function(success, failure) {
-            fetch("https://ipapi.co/json")
-                .then(res => res.json())
-                .then(data => success(data.country_code))
-                .catch(() => success("ae")); // Fallback to UAE if IP detection fails
-        },
-        utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
-    });
-</script>
 
 
-
-<script> /* JS fallback: force inline styles on options when the select is opened. This helps on browsers that ignore CSS rules for <option>. */ (function() { var selector = 'select#country-code, select.country-select, select.form-select, select'; function styleOptions(sel) { try { var opts = sel.options; for (var i = 0; i < opts.length; i++) { opts[i].style.backgroundColor = '#ffffff'; opts[i].style.color = '#111111'; } } catch (e) { // Some browsers restrict option styling; ignore errors. } } function onOpen(e) { styleOptions(e.currentTarget); // For some mobile/native pickers, reapply after a short delay setTimeout(function(){ styleOptions(e.currentTarget); }, 50); } function attach() { var selects = document.querySelectorAll(selector); selects.forEach(function(sel) { // apply once on load styleOptions(sel); // apply when user opens the native dropdown sel.addEventListener('mousedown', onOpen, {passive:true}); sel.addEventListener('touchstart', onOpen, {passive:true}); sel.addEventListener('focus', onOpen, {passive:true}); // also reapply if options change dynamically var mo = new MutationObserver(function() { styleOptions(sel); }); mo.observe(sel, { childList: true, subtree: true }); }); } if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', attach); } else { attach(); } })(); </script>
 
 
 
