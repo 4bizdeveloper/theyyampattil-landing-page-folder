@@ -11,17 +11,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/css/intlTelInput.css"/>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
     
-
-
-  <!-- Favicon using your provided PNG -->
-<link rel="icon" type="image/png" sizes="32x32" href="assets/images/log.png">
-<link rel="icon" type="image/png" sizes="16x16" href="assets/images/log.png">
-<link rel="apple-touch-icon" sizes="180x180" href="assets/images/log.png">
-<meta name="theme-color" content="#121212">
-
-
-
-
+    <link rel="icon" type="image/png" href="assets/images/log.png">
+    <meta name="theme-color" content="#121212">
 
     <style>
         :root {
@@ -38,27 +29,38 @@
         }
         h1 { font-family: 'Playfair Display', serif; }
 
-        /* PULSE EFFECT */
+        /* HEADER & BANNER SPACING FIX */
+        .hero-section {
+            padding-top: 140px !important; 
+        }
+
+        @media (max-width: 768px) {
+            .hero-section { padding-top: 100px !important; padding-bottom: 2rem !important; }
+            .hero-title { font-size: 1.75rem !important; line-height: 1.2 !important; margin-bottom: 0.75rem !important; }
+            .hero-text { font-size: 0.85rem !important; margin-bottom: 1rem !important; }
+            .glass-panel { padding: 1.25rem !important; margin-top: 0.5rem !important; }
+            .form-input-unified { padding: 0.75rem !important; font-size: 14px !important; }
+        }
+
+        @media (min-width: 1024px) {
+            .hero-title { font-size: 3.5rem !important; line-height: 1.1 !important; margin-bottom: 1.5rem !important; }
+        }
+
         @keyframes pulse-gold {
             0% { box-shadow: 0 0 0 0 rgba(197, 163, 103, 0.7); }
             70% { box-shadow: 0 0 0 15px rgba(197, 163, 103, 0); }
             100% { box-shadow: 0 0 0 0 rgba(197, 163, 103, 0); }
         }
-        .pulse-btn {
-            animation: pulse-gold 2s infinite;
-        }
+        .pulse-btn { animation: pulse-gold 2s infinite; }
 
-        .hero-overlay {
-            background: linear-gradient(90deg, rgba(18,18,18,0.9) 0%, rgba(18,18,18,0.6) 50%, rgba(18,18,18,0.3) 100%);
-        }
+        .hero-overlay { background: linear-gradient(180deg, rgba(18,18,18,0.85) 0%, rgba(18,18,18,0.7) 100%); }
 
         .glass-panel {
-            background: rgba(28, 28, 28, 0.95);
+            background: rgba(28, 28, 28, 0.98);
             backdrop-filter: blur(10px);
-            border: 1px solid rgba(197, 163, 103, 0.2);
+            border: 1px solid rgba(197, 163, 103, 0.3);
         }
 
-        /* Unified Form Field Styling */
         .form-input-unified {
             background-color: var(--input-bg) !important;
             border: 1px solid rgba(255, 255, 255, 0.1) !important;
@@ -69,59 +71,49 @@
             outline: none;
             transition: border-color 0.3s;
         }
-        .form-input-unified:focus {
-            border-color: var(--gold) !important;
-        }
+        .form-input-unified:focus { border-color: var(--gold) !important; }
 
-        /* Essential Fix for Product Visibility */
-        .product-card {
-            background: var(--charcoal);
-            border: 1px solid rgba(255,255,255,0.05);
-            opacity: 1 !important;
-        }
-
-        .img-container { overflow: hidden; position: relative; cursor: zoom-in; background: #222; }
-        .product-img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; }
-        .img-container:hover .product-img { transform: scale(1.1); }
-
-        #lightbox {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,0.95);
-            z-index: 2000;
-            justify-content: center;
+        .product-card { background: var(--charcoal); border: 1px solid rgba(255,255,255,0.05); }
+        
+        /* MODIFIED FOR FULL VIEW - NO CROPPING */
+        .img-container { 
+            overflow: hidden; 
+            position: relative; 
+            cursor: zoom-in; 
+            background: #1a1a1a; /* Neutral background for letterboxing */
+            display: flex;
             align-items: center;
+            justify-content: center;
+            height: 300px; /* Increased height for better visibility */
         }
+        .product-img { 
+            max-width: 100%; 
+            max-height: 100%; 
+            width: auto;
+            height: auto;
+            object-fit: contain; /* Ensures the FULL image is always visible */
+            transition: transform 0.5s ease; 
+        }
+        .img-container:hover .product-img { transform: scale(1.08); }
 
-        /* Phone Input Overrides - Matching Field Colors */
+        #lightbox { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 2000; justify-content: center; align-items: center; }
+
         .iti { width: 100%; }
-        .iti__country-list { background-color: #1c1c1c; color: white; border: 1px solid #333; }
-        .iti__country:hover { background-color: #333; }
+        .iti__country-list { background-color: #1c1c1c; color: white; border: 1px solid #333; z-index: 100; }
         #phone { background-color: var(--input-bg) !important; border: 1px solid rgba(255, 255, 255, 0.1) !important; color: white !important; }
     </style>
 </head>
 <body>
 
     <div id="lightbox" onclick="this.style.display='none'">
-        <img id="lightbox-img" src="" class="max-w-[90%] max-h-[90vh] object-contain">
+        <img id="lightbox-img" src="" class="max-w-[95%] max-h-[95vh] object-contain">
     </div>
 
-    <nav class="fixed w-full z-50 bg-black/60 backdrop-blur-md border-b border-white/5">
+    <nav class="fixed w-full z-50 bg-black/80 backdrop-blur-md border-b border-white/5">
         <div class="container mx-auto px-6 py-4 flex justify-between items-center">
-            <a href="/"><img src="assets/images/log.png" alt="Logo" class="h-16 md:h-20 w-auto"></a>
+            <a href="https://ae.theyyampattilgcc.com/landing-3.html"><img src="assets/images/log.png" alt="Logo" class="h-14 md:h-16 w-auto"></a>
             <div class="flex items-center gap-4">
-
-
-                <!-- <a href="https://theyyampattilgcc.com/" class="flex items-center gap-2 bg-[#c5a367] text-black px-5 py-2.5 rounded-lg font-bold text-sm">
-                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-    <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path>
-</svg>
-                    Our Portfolio
-                </a> -->
-
-
-                <a href="tel:+971559132200" class="flex items-center gap-2 bg-[#c5a367] text-black px-5 py-2.5 rounded-lg font-bold text-sm">
+                <a href="tel:+971559132200" class="flex items-center gap-2 bg-[#c5a367] text-black px-4 py-2 rounded-lg font-bold text-sm">
                     <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"></path></svg>
                     Call Now
                 </a>
@@ -129,42 +121,46 @@
         </div>
     </nav>
 
-    <section class="relative min-h-screen flex items-center pt-32 pb-16">
+    <section class="relative min-h-screen flex items-center hero-section">
         <div class="absolute inset-0 z-0">
             <div class="hero-overlay absolute inset-0 z-10"></div>
             <img src="assets/images/landing-header-bg.jpg" class="w-full h-full object-cover">
         </div>
 
-        <div class="container mx-auto px-6 relative z-20 grid lg:grid-cols-2 gap-16 items-center">
-            <div>
-                <h1 class="text-5xl lg:text-7xl font-bold leading-tight mb-8 uppercase">
-                    LUXURY CUSTOM <br><span class="text-[#c5a367]">FURNITURE</span> FOR <br>MODERN LIVING IN UAE
+        <div class="container mx-auto px-6 relative z-20 flex flex-col lg:grid lg:grid-cols-2 gap-8 items-start">
+            <div class="text-center lg:text-left">
+                <h1 class="font-bold leading-tight uppercase hero-title">
+                    LUXURY <span class="text-[#c5a367]">CUSTOM FURNITURE</span> IN UAE
                 </h1>
-                <p class="text-gray-300 text-lg mb-10 max-w-lg leading-relaxed">
-                    Theyyampattil designs and crafts bespoke TV walls, kitchens, and closets for refined spaces across the UAE.
+                <p class="text-gray-300 text-sm lg:text-base mb-4 lg:mb-8 max-w-lg leading-relaxed hero-text">
+                    Bespoke TV walls, kitchens, and closets designed for refined spaces.
                 </p>
-                <div class="flex flex-wrap gap-6 text-sm text-[#c5a367] font-semibold">
-                    <span>✓ Free Interior Consultation</span>
+                
+                <div class="hidden sm:flex flex-wrap justify-center lg:justify-start gap-4 text-xs lg:text-sm text-[#c5a367] font-semibold mb-6">
+                    <span>✓ Free Consultation</span>
                     <span>✓ Site Measurement</span>
-                    <span>✓ Complete Project Execution</span>
-                    <span>✓ After-Sales Support</span>
+                    <span>✓ Complete Execution</span>
+                </div>
+
+                <div class="mt-2">
+                    <a href="https://theyyampattilcloset.com/" class="inline-flex items-center gap-3 bg-white/5 border border-[#c5a367] text-[#c5a367] px-6 py-2.5 rounded-xl font-bold text-xs hover:bg-[#c5a367] hover:text-black transition-all">
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path></svg>
+                        VISIT OUR HOME PAGE
+                    </a>
                 </div>
             </div>
 
-            <div class="glass-panel p-8 rounded-2xl mt-12 lg:mt-0">
-                <h3 class="text-2xl font-bold mb-8 text-center text-[#c5a367]">Enquire Now</h3>
-                <form action="send-mail.php" method="POST" class="space-y-5">
+            <div class="glass-panel p-6 lg:p-8 rounded-2xl w-full max-w-md mx-auto">
+                <h3 class="text-xl lg:text-2xl font-bold mb-4 text-center text-[#c5a367]">Enquire Now</h3>
+                <form action="send-mail.php" method="POST" class="space-y-3 lg:space-y-4">
                     <input type="hidden" name="country" id="country_code" value="AE">
-                    
                     <input type="text" name="name" placeholder="Your Name" class="form-input-unified" required>
                     <input type="email" name="email" placeholder="Email Address" class="form-input-unified" required>
-                    
                     <input type="tel" id="phone" name="phone" class="form-input-unified" style="padding-left: 52px !important;" required>
+                    <input type="text" name="job" placeholder="Project Type (e.g. TV Wall)" class="form-input-unified" required>
+                    <textarea name="message" rows="2" placeholder="Briefly describe your needs...(optional)" class="form-input-unified"></textarea>
                     
-                    <input type="text" name="job" placeholder="Job Title / Project Type" class="form-input-unified" required>
-                    <textarea name="message" rows="3" placeholder="What are you looking for?" class="form-input-unified"></textarea>
-                    
-                    <button type="submit" class="w-full bg-[#c5a367] text-black font-bold py-5 rounded-xl uppercase tracking-widest hover:brightness-110 transition shadow-lg">
+                    <button type="submit" class="w-full bg-[#c5a367] text-black font-bold py-4 rounded-xl uppercase tracking-widest hover:brightness-110 transition shadow-lg text-sm">
                         Get Pricing Now
                     </button>
                 </form>
@@ -172,10 +168,10 @@
         </div>
     </section>
 
-    <section class="py-24 bg-[#161616]" id="products">
+    <section class="py-16 bg-[#161616]" id="products">
         <div class="container mx-auto px-6">
-            <h2 class="text-4xl font-bold mb-16 text-center italic">Our Products</h2>
-            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-10">
+            <h2 class="text-3xl font-bold mb-12 text-center italic">Our Products</h2>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
                 <script>
                     const products = [
                         { name: "Modern Doors", img: "assets/images/modern door.jpg" },
@@ -191,18 +187,15 @@
                     ];
 
                     document.write(products.map(p => `
-                        <div class="product-card rounded-2xl overflow-hidden shadow-2xl">
-                            <div class="img-container h-64" onclick="openLightbox('${p.img}')">
-                                <img src="${p.img}" class="product-img" alt="${p.name}" onerror="this.src='https://via.placeholder.com/400x300?text=Image+Not+Found'">
+                        <div class="product-card rounded-2xl overflow-hidden shadow-xl">
+                            <div class="img-container" onclick="openLightbox('${p.img}')">
+                                <img src="${p.img}" class="product-img" alt="${p.name}" onerror="this.src='https://via.placeholder.com/400x300?text=Product'">
                             </div>
-                            <div class="p-8">
-                                <h3 class="text-xl font-bold mb-8 text-center text-white">${p.name}</h3>
-                                <div class="grid grid-cols-2 gap-4">
-                                    <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="bg-white/5 border border-white/10 py-3 rounded-lg text-xs font-bold uppercase hover:bg-white/10 transition text-white">Enquire</button>
-                                    <a href="tel:+971559132200" class="bg-[#c5a367] text-black py-3 rounded-lg text-xs font-bold uppercase text-center flex items-center justify-center gap-2 shadow-md">
-                                        <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20"><path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"></path></svg>
-                                        Call
-                                    </a>
+                            <div class="p-6 text-center">
+                                <h3 class="text-lg font-bold mb-6 text-white uppercase tracking-wider">${p.name}</h3>
+                                <div class="grid grid-cols-2 gap-3">
+                                    <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="bg-white/5 border border-white/10 py-2.5 rounded-lg text-[10px] font-bold uppercase text-white hover:bg-white/10 transition">Enquire</button>
+                                    <a href="tel:+971559132200" class="bg-[#c5a367] text-black py-2.5 rounded-lg text-[10px] font-bold uppercase flex items-center justify-center gap-1">Call Now</a>
                                 </div>
                             </div>
                         </div>
@@ -212,14 +205,12 @@
         </div>
     </section>
 
-    <footer class="py-12 bg-black text-center text-gray-500 text-sm border-t border-white/5">
+    <footer class="py-8 bg-black text-center text-gray-600 text-[10px] border-t border-white/5">
         <p>© 2026 Theyyampattil Furniture Trading LLC.</p>
     </footer>
 
-    <a href="tel:+971559132200" class="fixed bottom-8 right-8 z-[100] bg-[#c5a367] text-black p-5 rounded-full shadow-2xl pulse-btn hover:scale-110 transition-transform">
-        <svg class="w-7 h-7" fill="currentColor" viewBox="0 0 20 20">
-            <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"></path>
-        </svg>
+    <a href="tel:+971559132200" class="fixed bottom-6 right-6 z-[100] bg-[#c5a367] text-black p-4 rounded-full shadow-2xl pulse-btn hover:scale-110 transition-transform">
+        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"><path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"></path></svg>
     </a>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script>
@@ -230,22 +221,15 @@
         const iti = window.intlTelInput(phoneInput, {
             initialCountry: "auto",
             geoIpLookup: function(success, failure) {
-                fetch('https://ipinfo.io/json')
-                    .then(res => res.json())
-                    .then(data => {
-                        success(data.country);
-                        countryHidden.value = data.country.toUpperCase();
-                    })
-                    .catch(() => {
-                        success("ae");
-                        countryHidden.value = "AE";
-                    });
+                fetch('https://ipinfo.io/json').then(res => res.json()).then(data => {
+                    success(data.country);
+                    countryHidden.value = data.country.toUpperCase();
+                }).catch(() => {
+                    success("ae");
+                    countryHidden.value = "AE";
+                });
             },
             utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
-        });
-
-        phoneInput.addEventListener("countrychange", () => {
-            countryHidden.value = iti.getSelectedCountryData().iso2.toUpperCase();
         });
 
         function openLightbox(src) {
@@ -257,13 +241,10 @@
 
         window.addEventListener('load', () => {
             gsap.from(".product-card", {
-                scrollTrigger: {
-                    trigger: "#products",
-                    start: "top 80%"
-                },
-                y: 30,
+                scrollTrigger: { trigger: "#products", start: "top 85%" },
+                y: 20,
                 opacity: 0,
-                duration: 0.8,
+                duration: 0.6,
                 stagger: 0.1
             });
         });
