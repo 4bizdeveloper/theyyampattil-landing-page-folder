@@ -28,100 +28,150 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
 
 
-    <style>
-        :root {
-            --gold: #c5a367;
-            --obsidian: #121212;
-            --charcoal: #1c1c1c;
-            --input-bg: rgba(255, 255, 255, 0.07);
-        }
-        body { 
-            font-family: 'Plus Jakarta Sans', sans-serif; 
-            background-color: var(--obsidian); 
-            color: #f8f8f8;
-            scroll-behavior: smooth;
-        }
-        h1 { font-family: 'Playfair Display', serif; }
+<style>
+    :root {
+        --gold: #c5a367;
+        --obsidian: #121212;
+        --charcoal: #1c1c1c;
+        --input-bg: rgba(255, 255, 255, 0.07);
+    }
 
-        /* HEADER & BANNER SPACING FIX */
-        .hero-section {
-            padding-top: 140px !important; 
-        }
+    body { 
+        font-family: 'Plus Jakarta Sans', sans-serif; 
+        background-color: var(--obsidian); 
+        color: #f8f8f8;
+        scroll-behavior: smooth;
+    }
 
-        @media (max-width: 768px) {
-            .hero-section { padding-top: 100px !important; padding-bottom: 2rem !important; }
-            .hero-title { font-size: 1.75rem !important; line-height: 1.2 !important; margin-bottom: 0.75rem !important; }
-            .hero-text { font-size: 0.85rem !important; margin-bottom: 1rem !important; }
-            .glass-panel { padding: 1.25rem !important; margin-top: 0.5rem !important; }
-            .form-input-unified { padding: 0.75rem !important; font-size: 14px !important; }
-        }
+    h1 { font-family: 'Playfair Display', serif; }
 
-        @media (min-width: 1024px) {
-            .hero-title { font-size: 3.5rem !important; line-height: 1.1 !important; margin-bottom: 1.5rem !important; }
-        }
+    /* HEADER & BANNER SPACING */
+    .hero-section {
+        padding-top: 140px !important; 
+    }
 
-        @keyframes pulse-gold {
-            0% { box-shadow: 0 0 0 0 rgba(197, 163, 103, 0.7); }
-            70% { box-shadow: 0 0 0 15px rgba(197, 163, 103, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(197, 163, 103, 0); }
-        }
-        .pulse-btn { animation: pulse-gold 2s infinite; }
+    @media (max-width: 768px) {
+        .hero-section { padding-top: 140px !important; padding-bottom: 2rem !important; }
+        .hero-title { font-size: 1.75rem !important; line-height: 1.2 !important; margin-bottom: 0.75rem; margin-top: 1rem !important;  }
+        .hero-text { font-size: 0.85rem !important; margin-bottom: 1rem !important; }
+        .glass-panel { padding: 1.25rem !important; margin-top: 0.5rem !important; }
+        .form-input-unified { padding: 0.75rem !important; font-size: 14px !important; }
+    }
 
-        .hero-overlay { background: linear-gradient(180deg, rgba(18,18,18,0.85) 0%, rgba(18,18,18,0.7) 100%); }
+    @media (min-width: 1024px) {
+        .hero-title { font-size: 3.5rem !important; line-height: 1.1 !important; margin-bottom: 1.5rem !important; }
+    }
 
-        .glass-panel {
-            background: rgba(28, 28, 28, 0.98);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(197, 163, 103, 0.3);
-        }
+    @keyframes pulse-gold {
+        0% { box-shadow: 0 0 0 0 rgba(197, 163, 103, 0.7); }
+        70% { box-shadow: 0 0 0 15px rgba(197, 163, 103, 0); }
+        100% { box-shadow: 0 0 0 0 rgba(197, 163, 103, 0); }
+    }
+    .pulse-btn { animation: pulse-gold 2s infinite; }
 
-        .form-input-unified {
-            background-color: var(--input-bg) !important;
-            border: 1px solid rgba(255, 255, 255, 0.1) !important;
-            color: white !important;
-            width: 100%;
-            padding: 1rem;
-            border-radius: 0.75rem;
-            outline: none;
-            transition: border-color 0.3s;
-        }
-        .form-input-unified:focus { border-color: var(--gold) !important; }
+    .hero-overlay { background: linear-gradient(180deg, rgba(18,18,18,0.85) 0%, rgba(18,18,18,0.7) 100%); }
 
-        .product-card { background: var(--charcoal); border: 1px solid rgba(255,255,255,0.05); }
-        
-        /* MODIFIED FOR FULL VIEW - NO CROPPING */
-        .img-container { 
-            overflow: hidden; 
-            position: relative; 
-            cursor: zoom-in; 
-            background: #1a1a1a; /* Neutral background for letterboxing */
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 300px; /* Increased height for better visibility */
-        }
-        .product-img { 
-            max-width: 100%; 
-            max-height: 100%; 
-            width: auto;
-            height: auto;
-            object-fit: contain; /* Ensures the FULL image is always visible */
-            transition: transform 0.5s ease; 
-        }
-        .img-container:hover .product-img { transform: scale(1.08); }
+    .glass-panel {
+        background: rgba(28, 28, 28, 0.98);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(197, 163, 103, 0.3);
+    }
 
-        #lightbox { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 2000; justify-content: center; align-items: center; }
+    .form-input-unified {
+        background-color: var(--input-bg) !important;
+        border: 1px solid rgba(255, 255, 255, 0.1) !important;
+        color: white !important;
+        width: 100%;
+        padding: 1rem;
+        border-radius: 0.75rem;
+        outline: none;
+        transition: border-color 0.3s;
+    }
+    .form-input-unified:focus { border-color: var(--gold) !important; }
 
-        .iti { width: 100%; }
-        .iti__country-list { background-color: #1c1c1c; color: white; border: 1px solid #333; z-index: 100; }
-        #phone { background-color: var(--input-bg) !important; border: 1px solid rgba(255, 255, 255, 0.1) !important; color: white !important; }
+    /* PRODUCT CARD & SLIDER FIXES */
+    .product-card { 
+        background: var(--charcoal); 
+        border: 1px solid rgba(255,255,255,0.05); 
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .img-container { 
+        overflow: hidden; 
+        position: relative; 
+        background: #1a1a1a;
+        height: 400px; 
+        cursor: pointer;
+    }
 
-        /* Add this inside your <style> tag */
+    .slider-wrapper {
+        display: flex;
+        width: 300%; /* Matches 3 images */
+        height: 100%;
+        transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+        will-change: transform;
+    }
+
+    /* Individual slide container */
+    .slider-wrapper > div {
+        width: 33.3333%; 
+        flex-shrink: 0; /* Prevents images from squishing */
+        height: 100%;
+    }
+
+    .product-img { 
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .product-title-overlay {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        padding: 40px 20px 20px;
+        background: linear-gradient(to top, rgba(0,0,0,0.95) 0%, transparent 100%);
+        color: white;
+        pointer-events: none;
+        z-index: 10;
+    }
+
+    .slider-dots {
+        position: absolute;
+        bottom: 80px;
+        right: 20px;
+        display: flex;
+        gap: 8px;
+        z-index: 11;
+    }
+
+    .dot { 
+        width: 8px; 
+        height: 8px; 
+        background: rgba(255,255,255,0.3); 
+        border-radius: 50%; 
+        transition: all 0.3s ease;
+    }
+    .dot.active { 
+        background: var(--gold); 
+        transform: scale(1.2);
+    }
+
+    #lightbox { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 2000; justify-content: center; align-items: center; }
+
+    .iti { width: 100%; }
+    .iti__country-list { background-color: #1c1c1c; color: white; border: 1px solid #333; z-index: 100; }
+    #phone { background-color: var(--input-bg) !important; border: 1px solid rgba(255, 255, 255, 0.1) !important; color: white !important; }
+
     .footer-safe-zone {
         padding-bottom: 200px !important; 
-         }
+    }
+</style>
 
-    </style>
+
+
 </head>
 <body>
 
@@ -134,9 +184,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
 
 
-    <div id="lightbox" onclick="this.style.display='none'">
-        <img id="lightbox-img" src="" class="max-w-[95%] max-h-[95vh] object-contain">
-    </div>
+  <div id="lightbox" class="fixed inset-0 bg-black/95 z-[2000] hidden flex-col items-center justify-center"></div>
 
     <nav class="fixed w-full z-50 bg-black/80 backdrop-blur-md border-b border-white/5">
         <div class="container mx-auto px-6 py-4 flex justify-between items-center">
@@ -172,20 +220,17 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                     <span>✓ After-Sales Support</span>
                 </div>
 
-                <div class="mt-2">
-                    <a href="https://theyyampattilgcc.com/" class="inline-flex items-center gap-3 bg-white/5 border border-[#c5a367] text-[#c5a367] px-6 py-2.5 rounded-xl font-bold text-xs hover:bg-[#c5a367] hover:text-black transition-all">
-                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path></svg>
-                        VISIT OUR HOME PAGE
-                    </a>&nbsp;&nbsp;&nbsp;
-                
-                    <a href="tel:+971559132200" class="inline-flex items-center gap-3 bg-white/5 border border-[#c5a367] text-[#c5a367] px-6 py-2.5 rounded-xl font-bold text-xs hover:bg-[#c5a367] hover:text-black transition-all">
-                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-  <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"></path>
-</svg>
-                        CALL US NOW
-                    </a>
+                <div class="mt-4 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
+    <a href="https://theyyampattilgcc.com/" class="w-full sm:w-auto inline-flex items-center justify-center gap-3 bg-white/5 border border-[#c5a367] text-[#c5a367] px-6 py-3 rounded-xl font-bold text-xs hover:bg-[#c5a367] hover:text-black transition-all">
+        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path></svg>
+        VISIT OUR HOME PAGE
+    </a>
 
-                </div>
+    <a href="tel:+971559132200" class="w-full sm:w-auto inline-flex items-center justify-center gap-3 bg-white/5 border border-[#c5a367] text-[#c5a367] px-6 py-3 rounded-xl font-bold text-xs hover:bg-[#c5a367] hover:text-black transition-all">
+        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"></path></svg>
+        CALL US NOW
+    </a>
+</div>
                 
             </div>
 
@@ -207,46 +252,134 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         </div>
     </section>
 
-    <section class="py-16 bg-[#161616]" id="products">
-        <div class="container mx-auto px-6">
-            <h2 class="text-3xl font-bold mb-12 text-center italic">Our Products</h2>
-            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <script>
-                    const products = [
-                        { name: "Walk-in Closets", img: "assets/images/closets.jpg" },
-                        { name: "Kitchen", img: "assets/images/kitchen.jpg" },
-                        { name: "TV Wall", img: "assets/images/tv-wall.jpg" },
-                        { name: "Bed Panel", img: "assets/images/bed-panel.jpg" },
-                        { name: "Dressing Area", img: "assets/images/dressing-area.jpg" },
-                        { name: "Wall Panel", img: "assets/images/wall-panel.jpg" },
-                        { name: "Modern Doors", img: "assets/images/modern door.jpg" },
-                        { name: "Vanity", img: "assets/images/modern door.jpg" },
-                        
-                        
-                        // { name: "Partition", img: "assets/images/partition.jpg" },                        
-                        // { name: "Wall Cladding", img: "assets/images/wall-cladding.jpg" },
-                        // { name: "Welcome Unit", img: "assets/images/welcome-unit.jpg" }
 
-                    ];
+<!-- products section start -->
 
-                    document.write(products.map(p => `
-                        <div class="product-card rounded-2xl overflow-hidden shadow-xl">
-                            <div class="img-container" onclick="openLightbox('${p.img}')">
-                                <img src="${p.img}" class="product-img" alt="${p.name}" onerror="this.src='https://via.placeholder.com/400x300?text=Product'">
-                            </div>
-                            <div class="p-6 text-center">
-                                <h3 class="text-lg font-bold mb-6 text-white uppercase tracking-wider">${p.name}</h3>
-                                <div class="grid grid-cols-2 gap-3">
-                                    <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="bg-white/5 border border-white/10 py-2.5 rounded-lg text-[10px] font-bold uppercase text-white hover:bg-white/10 transition">Enquire</button>
-                                    <a href="tel:+971559132200" class="bg-[#c5a367] text-black py-2.5 rounded-lg text-[10px] font-bold uppercase flex items-center justify-center gap-1">Call Now</a>
-                                </div>
-                            </div>
-                        </div>
-                    `).join(''));
-                </script>
+<section class="py-16 bg-[#161616]" id="products">
+    <div class="container mx-auto px-6">
+        <h2 class="text-3xl font-bold mb-12 text-center italic">Our Products</h2>
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8" id="product-grid-sync">
+
+
+<!-- script starts -->
+<script>
+    const products = [
+        { name: "Walk-in Closets", imgs: ["assets/images/closet-1.jpeg", "assets/images/closet-2.jpeg", "assets/images/closet-3.jpeg"] },
+        { name: "Kitchen", imgs: ["assets/images/kitchen-1.jpeg", "assets/images/kitchen-2.jpeg", "assets/images/kitchen-3.jpeg"] },
+        { name: "TV Wall", imgs: ["assets/images/tv-wall-1.jpeg", "assets/images/tv-wall-2.jpeg", "assets/images/tv-wall-3.jpeg"] },
+        { name: "Bed Panel", imgs: ["assets/images/bed-panel-1.jpeg", "assets/images/bed-panel-2.jpeg", "assets/images/bed-panel-3.jpeg"] },
+        { name: "Dressing Area", imgs: ["assets/images/dressing-area-1.jpeg", "assets/images/dressing-area-2.jpeg", "assets/images/dressing-area-3.jpeg"] },
+        { name: "Wall Panel", imgs: ["assets/images/wall-panel-1.jpeg", "assets/images/wall-panel-2.jpeg", "assets/images/wall-panel-3.jpeg"] },
+        { name: "Modern Doors", imgs: ["assets/images/door-1.jpeg", "assets/images/door-2.jpeg", "assets/images/door-3.jpeg"] },
+        { name: "Vanity", imgs: ["assets/images/vanity-1.jpeg", "assets/images/vanity-2.jpeg", "assets/images/vanity-1.jpeg"] }
+    ];
+
+    let globalSlideIndex = 0;
+
+  function startMasterSyncSlide() {
+    setInterval(() => {
+        globalSlideIndex = (globalSlideIndex + 1) % 3;
+        const wrappers = document.querySelectorAll('.sync-wrapper');
+        const dotGroups = document.querySelectorAll('.sync-dots');
+
+        wrappers.forEach((wrapper, i) => {
+            // Shift by 33.333% increments to align with the 300% wide parent
+            const movePercentage = globalSlideIndex * 33.3333;
+            wrapper.style.transform = `translateX(-${movePercentage}%)`;
+            
+            // Update dots
+            const dots = dotGroups[i].querySelectorAll('.dot');
+            dots.forEach((d, idx) => {
+                d.classList.toggle('active', idx === globalSlideIndex);
+            });
+        });
+    }, 3000);
+}
+
+    function openProductLightbox(productIndex) {
+        const lb = document.getElementById('lightbox');
+        const product = products[productIndex];
+        
+        lb.innerHTML = `
+            <div class="relative w-full h-full flex flex-col items-center p-4">
+                <button onclick="closeLightbox()" class="my-6 bg-white text-black px-10 py-2.5 rounded-full font-bold uppercase text-xs z-[2100] shadow-2xl hover:bg-[#c5a367] transition-colors">
+                    ✕ Close Gallery
+                </button>
+                <div class="flex flex-col gap-10 overflow-y-auto w-full items-center pb-24 custom-scrollbar">
+                    ${product.imgs.map(img => `
+                        <img src="${img}" class="max-w-[95%] md:max-w-[75%] rounded-lg shadow-2xl border border-white/10" onerror="this.src='https://via.placeholder.com/800x1000?text=Gallery+Image'">
+                    `).join('')}
+                </div>
             </div>
+        `;
+        
+        lb.classList.remove('hidden');
+        lb.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+        document.body.style.height = '100vh';
+    }
+
+    function closeLightbox() {
+        const lb = document.getElementById('lightbox');
+        lb.style.display = 'none';
+        lb.classList.add('hidden');
+        lb.innerHTML = '';
+        document.body.style.overflow = '';
+        document.body.style.height = '';
+    }
+
+    document.getElementById('lightbox').addEventListener('click', function(e) {
+        if (e.target === this) closeLightbox();
+    });
+
+    function renderGrid() {
+        const grid = document.getElementById('product-grid-sync');
+        if(!grid) return;
+        
+        grid.innerHTML = products.map((p, i) => `
+            <div class="product-card rounded-2xl overflow-hidden shadow-xl border border-white/5 bg-[#1c1c1c]">
+                <div class="img-container group relative h-[400px] overflow-hidden cursor-pointer" onclick="openProductLightbox(${i})">
+                    <div class="slider-wrapper sync-wrapper flex h-full transition-transform duration-700 ease-in-out w-[300%]">
+                        ${p.imgs.map(src => `
+                            <div class="w-1/3 h-full overflow-hidden">
+                                <img src="${src}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                            </div>
+                        `).join('')}
+                    </div>
+                    <div class="slider-dots sync-dots absolute bottom-[80px] right-6 flex gap-2 z-20">
+                        <div class="dot w-2 h-2 rounded-full bg-white/30 transition-all duration-300"></div>
+                        <div class="dot w-2 h-2 rounded-full bg-white/30 transition-all duration-300"></div>
+                        <div class="dot w-2 h-2 rounded-full bg-white/30 transition-all duration-300"></div>
+                    </div>
+                    <div class="product-title-overlay absolute bottom-0 left-0 w-full p-8 bg-gradient-to-t from-black/95 to-transparent z-10">
+                        <h3 class="text-xl font-bold uppercase tracking-widest text-white">${p.name}</h3>
+                    </div>
+                </div>
+                <div class="p-6 text-center">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="bg-white/5 border border-white/10 py-3 rounded-lg text-[10px] font-bold uppercase text-white hover:bg-white/10 transition">Enquire</button>
+                        <a href="tel:+971559132200" class="bg-[#c5a367] text-black py-3 rounded-lg text-[10px] font-bold uppercase flex items-center justify-center gap-1">Call Now</a>
+                    </div>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    // Critical Performance Update: Instant render without entrance delays
+    window.addEventListener('DOMContentLoaded', () => {
+        renderGrid();
+        startMasterSyncSlide();
+    });
+</script>
+<!-- script ends -->
+
+
         </div>
-    </section>
+    </div>
+</section>
+
+<!-- products section ends -->
+
 
     <footer class="py-8 bg-black text-center text-gray-600 text-[10px] border-t border-white/5 footer-safe-zone">
     <p>© 2026 Theyyampattil Furniture Trading LLC.</p>
