@@ -9,8 +9,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/css/intlTelInput.css"/>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
-    
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Cormorant+Garamond:wght@300;500;700&display=swap" rel="stylesheet">
+
     <link rel="icon" type="image/png" href="assets/images/log.png">
     <meta name="theme-color" content="#121212">
 
@@ -27,6 +27,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
 
 
+<!-- style starts -->
 
 <style>
     :root {
@@ -43,7 +44,34 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         scroll-behavior: smooth;
     }
 
-    h1 { font-family: 'Playfair Display', serif; }
+    /* THE MAIN TITLE FONT */
+    h1 { font-family: 'Cormorant Garamond', serif; font-weight: 700; }
+
+    /* SECTION HEADING: "Our Products" - EXACT BOLD SERIF */
+    #products h2 {
+        font-family: 'Cormorant Garamond', serif;
+        font-weight: 700; 
+        font-style: normal !important;
+        text-transform: none; /* Shows text exactly as you type it */
+        letter-spacing: 0.02em; 
+        color: #ffffff;
+        font-size: 3rem;
+        position: relative;
+        padding-bottom: 20px;
+        margin-bottom: 4rem;
+        text-align: center;
+    }
+
+    #products h2::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 60px;
+        height: 1px;
+        background: var(--gold);
+    }
 
     /* HEADER & BANNER SPACING */
     .hero-section {
@@ -56,6 +84,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         .hero-text { font-size: 0.85rem !important; margin-bottom: 1rem !important; }
         .glass-panel { padding: 1.25rem !important; margin-top: 0.5rem !important; }
         .form-input-unified { padding: 0.75rem !important; font-size: 14px !important; }
+        #products h2 { font-size: 2.25rem; letter-spacing: 0.01em; }
     }
 
     @media (min-width: 1024px) {
@@ -89,12 +118,32 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     }
     .form-input-unified:focus { border-color: var(--gold) !important; }
 
-    /* PRODUCT CARD & SLIDER FIXES */
+    /* PRODUCT GRID */
+    #product-grid-sync {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 2rem;
+        max-width: 1300px;
+        margin: 0 auto;
+    }
+
     .product-card { 
         background: var(--charcoal); 
         border: 1px solid rgba(255,255,255,0.05); 
         position: relative;
         overflow: hidden;
+        flex: 0 1 calc(33.333% - 1.4rem); 
+        min-width: 300px; 
+        border-radius: 1rem;
+    }
+
+    @media (max-width: 1024px) {
+        .product-card { flex: 0 1 calc(50% - 1rem); }
+    }
+
+    @media (max-width: 640px) {
+        .product-card { flex: 1 1 100%; }
     }
     
     .img-container { 
@@ -107,23 +156,27 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
     .slider-wrapper {
         display: flex;
-        width: 300%; /* Matches 3 images */
         height: 100%;
         transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
         will-change: transform;
     }
 
-    /* Individual slide container */
-    .slider-wrapper > div {
-        width: 33.3333%; 
-        flex-shrink: 0; /* Prevents images from squishing */
+    .slider-slide {
+        flex: 0 0 100%;
         height: 100%;
     }
 
-    .product-img { 
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
+    /* INDIVIDUAL PRODUCT NAMES: EXACT BOLD SERIF & NATURAL CASE */
+    .product-name-modern {
+        font-family: 'Cormorant Garamond', serif;
+        font-weight: 700; /* Bold for visibility */
+        font-style: normal !important;
+        text-transform: none; /* Shows text exactly as typed */
+        letter-spacing: 0.02em; 
+        font-size: 1.7rem;
+        color: white;
+        line-height: 1.1;
+        text-shadow: 0 2px 15px rgba(0,0,0,0.9); /* High contrast for ads */
     }
 
     .product-title-overlay {
@@ -131,16 +184,15 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         bottom: 0;
         left: 0;
         width: 100%;
-        padding: 40px 20px 20px;
-        background: linear-gradient(to top, rgba(0,0,0,0.95) 0%, transparent 100%);
-        color: white;
+        padding: 60px 24px 24px;
+        background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, transparent 100%);
         pointer-events: none;
         z-index: 10;
     }
 
     .slider-dots {
         position: absolute;
-        bottom: 80px;
+        bottom: 85px;
         right: 20px;
         display: flex;
         gap: 8px;
@@ -148,18 +200,21 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     }
 
     .dot { 
-        width: 8px; 
-        height: 8px; 
+        width: 6px; 
+        height: 6px; 
         background: rgba(255,255,255,0.3); 
         border-radius: 50%; 
         transition: all 0.3s ease;
     }
     .dot.active { 
         background: var(--gold); 
-        transform: scale(1.2);
+        transform: scale(1.3);
     }
 
     #lightbox { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 2000; justify-content: center; align-items: center; }
+
+    .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 10px; }
 
     .iti { width: 100%; }
     .iti__country-list { background-color: #1c1c1c; color: white; border: 1px solid #333; z-index: 100; }
@@ -169,6 +224,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         padding-bottom: 200px !important; 
     }
 </style>
+
+<!-- style ends -->
 
 
 
@@ -257,7 +314,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
 <section class="py-16 bg-[#161616]" id="products">
     <div class="container mx-auto px-6">
-        <h2 class="text-3xl font-bold mb-12 text-center italic">Our Products</h2>
+        <h2 class="text-3xl font-bold mb-12 text-center italic">Design the Way You Live</h2>
         <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8" id="product-grid-sync">
 
 
@@ -271,31 +328,40 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         { name: "Dressing Area", imgs: ["assets/images/dressing-area-1.jpeg", "assets/images/dressing-area-2.jpeg", "assets/images/dressing-area-3.jpeg"] },
         { name: "Wall Panel", imgs: ["assets/images/wall-panel-1.jpeg", "assets/images/wall-panel-2.jpeg", "assets/images/wall-panel-3.jpeg"] },
         { name: "Modern Doors", imgs: ["assets/images/door-1.jpeg", "assets/images/door-2.jpeg", "assets/images/door-3.jpeg"] },
-        { name: "Vanity", imgs: ["assets/images/vanity-1.jpeg", "assets/images/vanity-2.jpeg", "assets/images/vanity-1.jpeg"] }
+        { name: "Vanity", imgs: ["assets/images/vanity-1.jpeg", "assets/images/vanity-2.jpeg"] }
     ];
 
     let globalSlideIndex = 0;
 
-  function startMasterSyncSlide() {
-    setInterval(() => {
-        globalSlideIndex = (globalSlideIndex + 1) % 3;
-        const wrappers = document.querySelectorAll('.sync-wrapper');
-        const dotGroups = document.querySelectorAll('.sync-dots');
-
-        wrappers.forEach((wrapper, i) => {
-            // Shift by 33.333% increments to align with the 300% wide parent
-            const movePercentage = globalSlideIndex * 33.3333;
-            wrapper.style.transform = `translateX(-${movePercentage}%)`;
+    // MASTER SYNC: Automatically rotates images across all cards
+    function startMasterSyncSlide() {
+        setInterval(() => {
+            globalSlideIndex++;
+            const wrappers = document.querySelectorAll('.sync-wrapper');
             
-            // Update dots
-            const dots = dotGroups[i].querySelectorAll('.dot');
-            dots.forEach((d, idx) => {
-                d.classList.toggle('active', idx === globalSlideIndex);
-            });
-        });
-    }, 3000);
-}
+            wrappers.forEach((wrapper, i) => {
+                const p = products[i];
+                if (!p || p.imgs.length <= 1) return;
 
+                const totalImgs = p.imgs.length;
+                // Modulo ensures products with different image counts (e.g. 2 vs 3) slide correctly
+                const localIndex = globalSlideIndex % totalImgs;
+                
+                // Shift based on the individual product's image count
+                const movePercentage = localIndex * (100 / totalImgs);
+                wrapper.style.transform = `translateX(-${movePercentage}%)`;
+                
+                // Find and update the dots for this specific card
+                const container = wrapper.closest('.img-container');
+                const dots = container.querySelectorAll('.dot');
+                dots.forEach((d, idx) => {
+                    d.classList.toggle('active', idx === localIndex);
+                });
+            });
+        }, 3000);
+    }
+
+    // DYNAMIC LIGHTBOX: Builds the gallery based on the number of images provided
     function openProductLightbox(productIndex) {
         const lb = document.getElementById('lightbox');
         const product = products[productIndex];
@@ -307,7 +373,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 </button>
                 <div class="flex flex-col gap-10 overflow-y-auto w-full items-center pb-24 custom-scrollbar">
                     ${product.imgs.map(img => `
-                        <img src="${img}" class="max-w-[95%] md:max-w-[75%] rounded-lg shadow-2xl border border-white/10" onerror="this.src='https://via.placeholder.com/800x1000?text=Gallery+Image'">
+                        <img src="${img}" class="max-w-[95%] md:max-w-[75%] rounded-lg shadow-2xl border border-white/10" onerror="this.src='https://via.placeholder.com/800x1000?text=Image+Not+Found'">
                     `).join('')}
                 </div>
             </div>
@@ -316,7 +382,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         lb.classList.remove('hidden');
         lb.style.display = 'flex';
         document.body.style.overflow = 'hidden';
-        document.body.style.height = '100vh';
     }
 
     function closeLightbox() {
@@ -325,47 +390,50 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         lb.classList.add('hidden');
         lb.innerHTML = '';
         document.body.style.overflow = '';
-        document.body.style.height = '';
     }
 
     document.getElementById('lightbox').addEventListener('click', function(e) {
         if (e.target === this) closeLightbox();
     });
 
+    // RENDER GRID: Generates cards and calculates widths/dots dynamically
     function renderGrid() {
         const grid = document.getElementById('product-grid-sync');
         if(!grid) return;
         
-        grid.innerHTML = products.map((p, i) => `
-            <div class="product-card rounded-2xl overflow-hidden shadow-xl border border-white/5 bg-[#1c1c1c]">
+        grid.innerHTML = products.map((p, i) => {
+            const imgCount = p.imgs.length;
+            return `
+            <div class="product-card">
                 <div class="img-container group relative h-[400px] overflow-hidden cursor-pointer" onclick="openProductLightbox(${i})">
-                    <div class="slider-wrapper sync-wrapper flex h-full transition-transform duration-700 ease-in-out w-[300%]">
+                    <div class="slider-wrapper sync-wrapper flex h-full transition-transform duration-700 ease-in-out" style="width: ${imgCount * 100}%">
                         ${p.imgs.map(src => `
-                            <div class="w-1/3 h-full overflow-hidden">
+                            <div style="width: ${100 / imgCount}%" class="h-full overflow-hidden">
                                 <img src="${src}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
                             </div>
                         `).join('')}
                     </div>
+                    
                     <div class="slider-dots sync-dots absolute bottom-[80px] right-6 flex gap-2 z-20">
-                        <div class="dot w-2 h-2 rounded-full bg-white/30 transition-all duration-300"></div>
-                        <div class="dot w-2 h-2 rounded-full bg-white/30 transition-all duration-300"></div>
-                        <div class="dot w-2 h-2 rounded-full bg-white/30 transition-all duration-300"></div>
+                        ${p.imgs.map((_, idx) => `
+                            <div class="dot w-2 h-2 rounded-full bg-white/30 transition-all duration-300 ${idx === 0 ? 'active' : ''}"></div>
+                        `).join('')}
                     </div>
+
                     <div class="product-title-overlay absolute bottom-0 left-0 w-full p-8 bg-gradient-to-t from-black/95 to-transparent z-10">
-                        <h3 class="text-xl font-bold uppercase tracking-widest text-white">${p.name}</h3>
+                        <h3 class="product-name-modern">${p.name}</h3>
                     </div>
                 </div>
                 <div class="p-6 text-center">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="grid grid-cols-2 gap-4">
                         <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="bg-white/5 border border-white/10 py-3 rounded-lg text-[10px] font-bold uppercase text-white hover:bg-white/10 transition">Enquire</button>
                         <a href="tel:+971559132200" class="bg-[#c5a367] text-black py-3 rounded-lg text-[10px] font-bold uppercase flex items-center justify-center gap-1">Call Now</a>
                     </div>
                 </div>
             </div>
-        `).join('');
+        `}).join('');
     }
 
-    // Critical Performance Update: Instant render without entrance delays
     window.addEventListener('DOMContentLoaded', () => {
         renderGrid();
         startMasterSyncSlide();
