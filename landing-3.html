@@ -321,19 +321,78 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- script starts -->
 <script>
     const products = [
-        { name: "Walk-in Closets", imgs: ["assets/images/closet-1.jpeg", "assets/images/closet-2.jpeg", "assets/images/closet-3.jpeg"] },
-        { name: "Kitchen", imgs: ["assets/images/kitchen-1.jpeg", "assets/images/kitchen-2.jpeg", "assets/images/kitchen-3.jpeg"] },
-        { name: "TV Wall", imgs: ["assets/images/tv-wall-1.jpeg", "assets/images/tv-wall-2.jpeg", "assets/images/tv-wall-3.jpeg"] },
-        { name: "Bed Panel", imgs: ["assets/images/bed-panel-1.jpeg", "assets/images/bed-panel-2.jpeg", "assets/images/bed-panel-3.jpeg"] },
-        { name: "Dressing Area", imgs: ["assets/images/dressing-area-1.jpeg", "assets/images/dressing-area-2.jpeg", "assets/images/dressing-area-3.jpeg"] },
-        { name: "Wall Panel", imgs: ["assets/images/wall-panel-1.jpeg", "assets/images/wall-panel-2.jpeg", "assets/images/wall-panel-3.jpeg"] },
-        { name: "Modern Doors", imgs: ["assets/images/door-1.jpeg", "assets/images/door-2.jpeg", "assets/images/door-3.jpeg"] },
-        { name: "Vanity", imgs: ["assets/images/vanity-1.jpeg", "assets/images/vanity-2.jpeg"] }
+        { 
+            name: "Walk-in Closets", 
+            imgs: ["assets/images/closet-1.jpeg", "assets/images/closet-2.jpeg", "assets/images/closet-3.jpeg"],
+            gallery: [
+                "assets/images/closet-1.jpeg", "assets/images/closet-2.jpeg", "assets/images/closet-3.jpeg","assets/images/closet-4.jpeg", "assets/images/closet-5.jpeg"
+            ] 
+        },
+        { 
+            name: "Kitchen", 
+            imgs: ["assets/images/kitchen-1.jpeg", "assets/images/kitchen-2.jpeg", "assets/images/kitchen-3.jpeg"],
+            gallery: [
+                "assets/images/kitchen-1.jpeg", "assets/images/kitchen-2.jpeg", "assets/images/kitchen-3.jpeg", "assets/images/kitchen-4.jpeg",
+                "assets/images/kitchen-5.jpeg", "assets/images/kitchen-6.jpeg", "assets/images/kitchen-7.jpeg", "assets/images/kitchen-8.jpeg",
+                "assets/images/kitchen-9.jpeg", "assets/images/kitchen-10.jpeg", "assets/images/kitchen-11.jpeg", "assets/images/kitchen-12.jpeg"
+            
+            ]
+        },
+        { 
+            name: "TV Wall", 
+            imgs: ["assets/images/tv-wall-1.jpeg", "assets/images/tv-wall-2.jpeg", "assets/images/tv-wall-3.jpeg",],
+            gallery: [
+                "assets/images/tv-wall-1.jpeg", "assets/images/tv-wall-2.jpeg", "assets/images/tv-wall-3.jpeg",
+                "assets/images/tv-wall-4.jpeg", "assets/images/tv-wall-5.jpeg", "assets/images/tv-wall-6.jpeg",
+                "assets/images/tv-wall-7.jpeg", "assets/images/tv-wall-8.jpeg", "assets/images/tv-wall-9.jpeg"
+            ] 
+        },
+        { 
+            name: "Bed Panel", 
+            imgs: ["assets/images/bed-panel-1.jpeg", "assets/images/bed-panel-2.jpeg", "assets/images/bed-panel-3.jpeg"],
+            gallery: [
+                "assets/images/bed-panel-1.jpeg", "assets/images/bed-panel-2.jpeg", "assets/images/bed-panel-3.jpeg",
+                "assets/images/bed-panel-4.jpeg", "assets/images/bed-panel-5.jpeg", "assets/images/bed-panel-6.jpeg",
+                "assets/images/bed-panel-7.jpeg", "assets/images/bed-panel-8.jpeg", "assets/images/bed-panel-9.jpeg",
+                "assets/images/bed-panel-10.jpeg"
+
+            ]
+        },
+        { 
+            name: "Dressing Area", 
+            imgs: ["assets/images/dressing-area-1.jpeg", "assets/images/dressing-area-2.jpeg", "assets/images/dressing-area-3.jpeg"],
+            gallery: [
+                "assets/images/dressing-area-1.jpeg", "assets/images/dressing-area-2.jpeg", "assets/images/dressing-area-3.jpeg",
+                "assets/images/dressing-area-4.jpeg"
+
+            ] 
+        },
+        { 
+            name: "Wall Panel", 
+            imgs: ["assets/images/wall-panel-1.jpeg", "assets/images/wall-panel-2.jpeg", "assets/images/wall-panel-3.jpeg"],
+            gallery: [
+                "assets/images/wall-panel-1.jpeg", "assets/images/wall-panel-2.jpeg", "assets/images/wall-panel-3.jpeg",
+                "assets/images/wall-panel-4.jpeg", "assets/images/wall-panel-5.jpeg", "assets/images/wall-panel-6.jpeg",
+                "assets/images/wall-panel-7.jpeg", "assets/images/wall-panel-8.jpeg"
+            ] 
+        },
+        { 
+            name: "Modern Doors", 
+            imgs: ["assets/images/door-1.jpeg", "assets/images/door-2.jpeg", "assets/images/door-3.jpeg"],
+            gallery: [
+                "assets/images/door-1.jpeg", "assets/images/door-2.jpeg", "assets/images/door-3.jpeg"
+            ] 
+        },
+        { 
+            name: "Vanity", 
+            imgs: ["assets/images/vanity-1.jpeg", "assets/images/vanity-2.jpeg"],
+            gallery: ["assets/images/vanity-1.jpeg", "assets/images/vanity-2.jpeg"] 
+        }
     ];
 
     let globalSlideIndex = 0;
 
-    // MASTER SYNC: Automatically rotates images across all cards
+    // MASTER SYNC: Automatically rotates images across all cards (Using .imgs only)
     function startMasterSyncSlide() {
         setInterval(() => {
             globalSlideIndex++;
@@ -344,14 +403,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 if (!p || p.imgs.length <= 1) return;
 
                 const totalImgs = p.imgs.length;
-                // Modulo ensures products with different image counts (e.g. 2 vs 3) slide correctly
                 const localIndex = globalSlideIndex % totalImgs;
                 
-                // Shift based on the individual product's image count
                 const movePercentage = localIndex * (100 / totalImgs);
                 wrapper.style.transform = `translateX(-${movePercentage}%)`;
                 
-                // Find and update the dots for this specific card
                 const container = wrapper.closest('.img-container');
                 const dots = container.querySelectorAll('.dot');
                 dots.forEach((d, idx) => {
@@ -361,18 +417,21 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         }, 3000);
     }
 
-    // DYNAMIC LIGHTBOX: Builds the gallery based on the number of images provided
+    // DYNAMIC LIGHTBOX: Now uses the .gallery array instead of the slider images
     function openProductLightbox(productIndex) {
         const lb = document.getElementById('lightbox');
         const product = products[productIndex];
         
+        // Use the gallery images if they exist, otherwise fallback to slider images
+        const displayImages = (product.gallery && product.gallery.length > 0) ? product.gallery : product.imgs;
+
         lb.innerHTML = `
             <div class="relative w-full h-full flex flex-col items-center p-4">
                 <button onclick="closeLightbox()" class="my-6 bg-white text-black px-10 py-2.5 rounded-full font-bold uppercase text-xs z-[2100] shadow-2xl hover:bg-[#c5a367] transition-colors">
                     ✕ Close Gallery
                 </button>
                 <div class="flex flex-col gap-10 overflow-y-auto w-full items-center pb-24 custom-scrollbar">
-                    ${product.imgs.map(img => `
+                    ${displayImages.map(img => `
                         <img src="${img}" class="max-w-[95%] md:max-w-[75%] rounded-lg shadow-2xl border border-white/10" onerror="this.src='https://via.placeholder.com/800x1000?text=Image+Not+Found'">
                     `).join('')}
                 </div>
@@ -396,7 +455,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         if (e.target === this) closeLightbox();
     });
 
-    // RENDER GRID: Generates cards and calculates widths/dots dynamically
+    // RENDER GRID: Generates cards using the slider (.imgs) array
     function renderGrid() {
         const grid = document.getElementById('product-grid-sync');
         if(!grid) return;
@@ -426,8 +485,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 </div>
                 <div class="p-6 text-center">
                     <div class="grid grid-cols-2 gap-4">
-                        <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="bg-white/5 border border-white/10 py-3 rounded-lg text-[10px] font-bold uppercase text-white hover:bg-white/10 transition">Enquire</button>
-                        <a href="tel:+971559132200" class="bg-[#c5a367] text-black py-3 rounded-lg text-[10px] font-bold uppercase flex items-center justify-center gap-1">Call Now</a>
+                        <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="bg-white/5 border border-white/10 py-3 rounded-lg text-[10px] font-bold uppercase text-white hover:bg-white/10 transition">📝 Enquire</button>
+                        <a href="tel:+971559132200" class="bg-[#c5a367] text-black py-3 rounded-lg text-[10px] font-bold uppercase flex items-center justify-center gap-1">📞 Call Now</a>
                     </div>
                 </div>
             </div>
